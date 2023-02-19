@@ -29,8 +29,8 @@ query($ids : [ID!]!){
       images(first: 250) {
           edges {
             node {
-              altText
               id
+              url
               originalSrc
             }
           }
@@ -44,9 +44,9 @@ query($ids : [ID!]!){
             }
             title
             image {
-              altText
               originalSrc
               id
+              url
             }
             compareAtPriceV2 {
               amount

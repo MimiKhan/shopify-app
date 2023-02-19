@@ -29,9 +29,9 @@ query($x : Int, $sortKey : ArticleSortKeys, $reverse: Boolean){
         excerptHtml
         handle
         id
-        image {
-          altText
+        image {          
           id
+          url
           originalSrc
         }
         publishedAt

@@ -103,7 +103,7 @@ class _SearchScreenState extends State<SearchScreen> {
                               style: const TextStyle(fontSize: 18),
                               controller: _controller,
                               onChanged: (value){
-                                controller.searchForProduct(value);
+                                controller.searchForProducts(value);
                               },
                               decoration: InputDecoration(
                                 hintText: '...',

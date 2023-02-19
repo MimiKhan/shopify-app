@@ -18,8 +18,8 @@ query($cursor : String){
               id
               title
               image {
-                altText
                 id
+                url
                 originalSrc
               }
               priceV2 {
@@ -74,8 +74,8 @@ query($cursor : String){
         images(first: 250) {
           edges {
             node {
-              altText
               id
+              url
               originalSrc
             }
           }

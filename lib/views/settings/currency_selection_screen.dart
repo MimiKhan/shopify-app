@@ -1,24 +1,24 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:lime_light_copy_shopify_store/controllers/settings_controller.dart';
 
-class CurrencySelectionScreen extends StatefulWidget {
-  static String selectedCurrency = '';
-  static var selectedCurrencyIcon;
-
+class CurrencySelectionScreen extends StatelessWidget {
   CurrencySelectionScreen({Key? key}) : super(key: key);
 
-  @override
-  State<CurrencySelectionScreen> createState() =>
-      _CurrencySelectionScreenState();
-}
+  final settingsController = Get.find<SettingsController>();
 
-class _CurrencySelectionScreenState extends State<CurrencySelectionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(CurrencySelectionScreen.selectedCurrency),
+        title: GetX<SettingsController>(
+          builder: (controller) {
+            return Text(controller.selectedCurrency.value);
+          }
+        ),
       ),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
@@ -76,8 +76,10 @@ class _CurrencySelectionScreenState extends State<CurrencySelectionScreen> {
         color: Colors.black,
       ),
       onTap: () {
-        CurrencySelectionScreen.selectedCurrency = title;
-        CurrencySelectionScreen.selectedCurrencyIcon = iconData;
+        settingsController.selectedCurrency.value = title;
+        settingsController.selectedCurrencyIcon.value = iconData;
+        // CurrencySelectionScreen.selectedCurrency = title;
+        // CurrencySelectionScreen.selectedCurrencyIcon = iconData;
         Navigator.pop(context);
       },
     );

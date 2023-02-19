@@ -1,0 +1,10 @@
+
+squareup.com
+
+business console account for Google_Pay
+Merchant ID for Apple_Pay
+
+
+
+Flutter Braintree SDK supports GooglePay, Apple_Pay, PayPal, CC etc.
+dep : flutter_braintree

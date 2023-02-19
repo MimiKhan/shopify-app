@@ -1,0 +1,186 @@
+ExpansionTile(
+      onExpansionChanged: (value) {
+        setState(() {
+          _isExpanded = value;
+        });
+      },
+      textColor: Colors.black,
+
+      leading: const Icon(Icons.shopping_cart_outlined),
+      title: Row(
+        children: [
+          Text(_isExpanded
+              ? 'Hide Order Summary'
+              : 'Show Order Summary'),
+          Icon(_isExpanded
+              ? Icons.keyboard_arrow_down
+              : Icons.keyboard_arrow_right),
+        ],
+      ),
+      trailing: Text(
+        '\$ ${cartController.totalCostSelectedItem}',
+        style: const TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
+      ),
+      children: [
+        Column(
+          children: [
+            GetX<CartController>(builder: (controller) {
+              return ListView(
+                physics: const NeverScrollableScrollPhysics(),
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                children: controller.cartModelItemsSelected
+                    .map((cartModelItem) {
+                  return SizedBox(
+                    height: 100,
+                    child: ListTile(
+                      style: ListTileStyle.list,
+                      title: Text(
+                        cartModelItem.product.title,
+                        style: const TextStyle(
+                          fontSize: 12,
+                        ),
+                      ),
+                      leading: Stack(children: <Widget>[
+                        CachedNetworkImage(
+                          imageUrl: cartModelItem
+                              .product.images.first.originalSrc,
+                          placeholder: (context, url) => Image.asset(
+                              'assets/images/lime-light-logo.png',
+                              fit: BoxFit.cover),
+                          errorWidget: (context, url, error) =>
+                          const Icon(Icons.error),
+                          fit: BoxFit.fill,
+                        ),
+                        Positioned(
+                            top: -5.0,
+                            right: 1.0,
+                            child: Stack(
+                              children: <Widget>[
+                                badges.Badge(
+                                  badgeContent: Text(cartModelItem
+                                      .quantity
+                                      .toString()),
+                                  showBadge: true,
+                                  ignorePointer: true,
+                                  badgeStyle: badges.BadgeStyle(
+                                    shape: badges.BadgeShape.circle,
+                                    badgeColor: Colors.blue,
+                                    padding:
+                                    const EdgeInsets.all(5),
+                                    borderRadius:
+                                    BorderRadius.circular(4),
+                                    borderSide: const BorderSide(
+                                        color: Colors.white,
+                                        width: 2),
+                                    badgeGradient: const badges
+                                        .BadgeGradient.linear(
+                                      colors: [
+                                        Colors.blue,
+                                        Colors.yellow
+                                      ],
+                                      begin: Alignment.topCenter,
+                                      end: Alignment.bottomCenter,
+                                    ),
+                                    elevation: 0,
+                                  ),
+                                  // badgeAnimation: const badges.BadgeAnimation.fade(
+                                  //   animationDuration: Duration(seconds: 3),
+                                  //   toAnimate: true,
+                                  //   // colorChangeAnimationDuration: Duration(seconds: 2),
+                                  //   disappearanceFadeAnimationDuration:
+                                  //   Duration(seconds: 1),
+                                  //   loopAnimation: true,
+                                  //   curve: Curves.elasticInOut,
+                                  //   // colorChangeAnimationCurve: Curves.easeInCubic,
+                                  // ),
+                                ),
+                              ],
+                            ))
+                      ]),
+                      subtitle: Text(cartModelItem.productVariant
+                          .selectedOptions!.first.value),
+                      trailing: Text(cartModelItem
+                          .productVariant.price.formattedPrice),
+                    ),
+                  );
+                }).toList(),
+              );
+            }),
+            const SizedBox(
+              height: 5,
+            ),
+            const Divider(
+              thickness: 1.2,
+              height: 1.1,
+              color: Colors.grey,
+              indent: 40,
+              endIndent: 40,
+            ),
+            const SizedBox(
+              height: 15,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Subtotal',
+                    style: TextStyle(fontSize: 22),
+                  ),
+                  Text(
+                    '\$${cartController.totalCostSelectedItem}',
+                    style: const TextStyle(fontSize: 22),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 15,
+            ),
+            const Divider(
+              thickness: 1.2,
+              height: 1.1,
+              color: Colors.grey,
+              indent: 40,
+              endIndent: 40,
+            ),
+            const SizedBox(
+              height: 15,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Total',
+                    style: TextStyle(fontSize: 22),
+                  ),
+                  Row(
+                    children: [
+                      GetX<CartController>(
+                          builder: (controller) {
+                            String currencyCode = controller.cartModelItems.first.productVariant.price.currencyCode;
+                            return Text(currencyCode,style: const TextStyle(fontSize: 16),);
+                          }
+                      ),
+                      SizedBox(width: 8,),
+                      Text(
+                        '\$${cartController.totalCostSelectedItem}',
+                        style: const TextStyle(fontSize: 22),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 15,
+            ),
+
+          ],
+        ),
+      ],
+    )

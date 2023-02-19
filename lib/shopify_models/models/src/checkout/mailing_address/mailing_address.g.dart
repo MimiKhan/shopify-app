@@ -12,7 +12,7 @@ _$_MailingAddress _$$_MailingAddressFromJson(Map<String, dynamic> json) =>
       address1: json['address1'] as String,
       city: json['city'] as String,
       country: json['country'] as String,
-      zip: json['zip'] as String,
+      zip: '00000',
       lastName: json['lastName'] as String?,
       name: json['name'] as String?,
       firstName: json['firstName'] as String?,

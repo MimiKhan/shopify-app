@@ -569,7 +569,8 @@ class ShopifyCheckout with ShopifyError {
     }
   }
 
-  Future<String?> checkoutCompleteWithTokenizedPaymentV3(String checkoutId,
+  Future<String?> checkoutCompleteWithTokenizedPaymentV3(
+      String checkoutId,
       {required Checkout checkout,
       required String token,
       required PaymentTokenType paymentTokenType,

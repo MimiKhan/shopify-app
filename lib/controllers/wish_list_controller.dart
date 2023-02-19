@@ -5,19 +5,22 @@ import 'package:lime_light_copy_shopify_store/shopify_models/models/src/product/
 
 class WishListController extends GetxController{
 
-  var products = <Product>[].obs;
+  var favouritesList = <Product>[].obs;
+  bool get keepAlive => true;
 
-  int get itemsCount => products.length;
+  int get itemsCount => favouritesList.length;
 
-
-
-  addProductToWishList(Product product){
-    products.add(product);
+  toggleFavorites(Product product){
+    if (favouritesList.contains(product)) {
+      favouritesList.remove(product);
+    } else {
+      favouritesList.add(product);
+    }
     update();
   }
 
-  removeProductFromWishList(Product product){
-    products.remove(product);
+  void removeProductFromWishList(Product product) {
+    favouritesList.remove(product);
     update();
   }
 

@@ -9,8 +9,8 @@ query($id : ID!, $cursor : String, $sortKey: ProductCollectionSortKeys){
       title
       updatedAt
       image {
-        altText
         id
+        url
         originalSrc
       }
       products(first: 10, sortKey: $sortKey, after: $cursor) {
@@ -43,8 +43,8 @@ query($id : ID!, $cursor : String, $sortKey: ProductCollectionSortKeys){
             images(first: 250) {
               edges {
                 node {
-                  altText
                   id
+                  url
                   originalSrc
                 }
               }
@@ -61,8 +61,8 @@ query($id : ID!, $cursor : String, $sortKey: ProductCollectionSortKeys){
                 node {
                   title
                   image {
-                    altText
                     id
+                    url
                     originalSrc
                   }
                   priceV2 {

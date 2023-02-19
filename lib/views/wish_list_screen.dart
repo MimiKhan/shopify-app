@@ -67,14 +67,14 @@ class WishListScreen extends StatelessWidget {
             const SizedBox(
               height: 30,
             ),
-            if (wishListController.products.isNotEmpty)
+            if (wishListController.favouritesList.value.isNotEmpty)
               GetX<WishListController>(
                 builder: (controller) => ListView(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   scrollDirection: Axis.vertical,
                   padding: const EdgeInsets.all(10),
-                  children: controller.products.map((product) {
+                  children: controller.favouritesList.value.map((product) {
                     return Dismissible(
                       background: Padding(
                         padding: const EdgeInsets.all(8.0),

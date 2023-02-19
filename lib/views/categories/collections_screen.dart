@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -50,25 +51,25 @@ class _CategoryScreenState extends State<CategoryScreen> {
                               horizontal: 15.0, vertical: 10),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Text(
+                            children: const [
+                              Text(
                                 "Collections",
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 28,
                                 ),
                               ),
-                              GestureDetector(
-                                onTap: () {
-                                  debugPrint('Search Icon here.');
-                                  Get.off(MainScreen(selectedIndex: 2));
-                                },
-                                child: const Icon(
-                                  CupertinoIcons.search,
-                                  size: 29,
-                                  color: Colors.grey,
-                                ),
-                              ),
+                              // GestureDetector(
+                              //   onTap: () {
+                              //     debugPrint('Search Icon here.');
+                              //     Get.off(MainScreen(selectedIndex: 2));
+                              //   },
+                              //   child: const Icon(
+                              //     CupertinoIcons.search,
+                              //     size: 29,
+                              //     color: Colors.grey,
+                              //   ),
+                              // ),
                             ],
                           ),
                         ),
@@ -92,30 +93,32 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                 padding: const EdgeInsets.only(top: 10.0),
                                 child: SizedBox(
                                   width: size.width - 10,
-                                  height: 200,
-                                  child: Stack(
-                                    fit: StackFit.expand,
+                                  height: 250,
+                                  child: Column(
                                     children: [
+
                                       ClipRRect(
                                         borderRadius: BorderRadius.circular(15),
-                                        child: Image(
-                                          image: NetworkImage(
-                                              controller.collectionsList[listViewIndex]
-                                                  .image!
-                                                  .originalSrc),
-                                          fit: BoxFit.cover,
-                                          filterQuality: FilterQuality.high,
+                                        child: CachedNetworkImage(
+                                          imageUrl: controller.collectionsList[listViewIndex].image!.originalSrc,
+                                          placeholder: (context, url) => Image.asset(
+                                              'assets/images/lime-light-logo.png',
+                                              fit: BoxFit.cover),
+                                          errorWidget: (context, url, error) => const Icon(Icons.error),
+                                          fit: BoxFit.fill,
+                                          height: 200,
+                                          width: size.width -10,
                                         ),
                                       ),
-                                      Center(
-                                        child: Text(
-                                          controller.collectionsList[listViewIndex].title,
-                                          style: TextStyle(
-                                              fontSize: context.textTheme
-                                                  .headlineMedium!.fontSize,
-                                              color: Colors.white),
-                                        ),
-                                      ),
+                                      // Center(
+                                      //   child: Text(
+                                      //     controller.collectionsList[listViewIndex].title,
+                                      //     style: TextStyle(
+                                      //         fontSize: context.textTheme
+                                      //             .headlineMedium!.fontSize,
+                                      //         color: Colors.black),
+                                      //   ),
+                                      // ),
                                     ],
                                   ),
                                 ),

@@ -1,11 +1,16 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lime_light_copy_shopify_store/controllers/cart_controller.dart';
 import 'package:lime_light_copy_shopify_store/controllers/wish_list_controller.dart';
 import 'package:lime_light_copy_shopify_store/shopify_models/models/models.dart';
 import 'package:lime_light_copy_shopify_store/views/main_ui/main_screen.dart';
+import 'package:html2md/html2md.dart' as html2md;
+import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:lime_light_copy_shopify_store/views/products_details/custom_image_view.dart';
+import 'package:lime_light_copy_shopify_store/views/cart/new_add_to_cart_screen.dart';
+import 'package:lime_light_copy_shopify_store/widgets/custom_image_view.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   final Product product;
@@ -28,13 +33,17 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
   bool _optionIconSelected = true;
   bool _tagsIconSelected = true;
   bool _categoryIconSelected = true;
-  late int _optionsLength;
-  var selectedItem = '';
+  String selectedItem = '';
 
   final wishlistController = Get.find<WishListController>();
   final cartController = Get.find<CartController>();
 
-  bool _favIconState = false;
+  late bool _favIconState;
+
+  String markdown = '';
+
+  // final panelController = PanelController();
+  // final controller = ScrollController();
 
   @override
   void initState() {
@@ -46,8 +55,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
 
     getProductVariantsTitle(product);
     getProductCollectionsTitle(product);
-    _optionsLength = product.option.length;
+    String? html = product.descriptionHtml;
+    markdown = html2md.convert(html!);
     // onlineStoreUrl = product.onlineStoreUrl!;
+    _favIconState = wishlistController.favouritesList.contains(product);
+    debugPrint("Fav Icon State : $_favIconState");
+
     super.initState();
   }
 
@@ -65,27 +78,30 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
     }
   }
 
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-  }
+
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
-
+    Size size = MediaQuery.of(context).size;
+    _favIconState = wishlistController.favouritesList.contains(product);
+    // final panelHeightOpen = MediaQuery.of(context).size.height * 0.9;
     return Scaffold(
       backgroundColor: Colors.grey,
       floatingActionButton: FloatingActionButton.extended(
-          onPressed: () {
-            cartController.addProduct(product);
-            Fluttertoast.showToast(msg: "${product.title} added to bag.");
-          },
-          backgroundColor: Colors.deepPurple,
-          elevation: 0,
-          label: const Text('Add to Bag',style: TextStyle(color: Colors.white),),
-          icon: const Icon(CupertinoIcons.bag_badge_plus,color: Colors.white,),),
+        onPressed: () {
+          Get.to(() => NewAddToCartScreen(product: product));
+        },
+        backgroundColor: Colors.deepPurple,
+        elevation: 0,
+        label: const Text(
+          'Add to Bag',
+          style: TextStyle(color: Colors.white),
+        ),
+        icon: const Icon(
+          CupertinoIcons.bag_badge_plus,
+          color: Colors.white,
+        ),
+      ),
       body: CustomScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
         shrinkWrap: true,
@@ -101,39 +117,30 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                 bottomRight: Radius.circular(20),
               ),
             ),
-            leading: GestureDetector(
-                onTap: () {
-                  Get.back();
-                },
-                child: const Icon(
-                  Icons.close,
-                  color: Colors.black,
-                ),),
+            // leading: GestureDetector(
+            //   onTap: () {
+            //     Navigator.pop(context);
+            //     // Get.back();
+            //   },
+            //   child: const Icon(
+            //     Icons.close,
+            //     color: Colors.black,
+            //   ),
+            // ),
             actions: [
               IconButton(
+                key: UniqueKey(),
                 onPressed: () {
-                  if (wishlistController.products.contains(product)) {
-                    wishlistController.removeProductFromWishList(product);
-                    setState(() {
-                      _favIconState = !_favIconState;
-                    });
-                    debugPrint('product already in wishlist');
-                  } else {
-                    wishlistController.addProductToWishList(product);
-                    Fluttertoast.showToast(msg: '${product.title} added to wishlist.');
-                    debugPrint('Wishlist Products length : ** ${wishlistController.itemsCount} **');
-                    setState(() {
-                      _favIconState = !_favIconState;
-                    });
-                  }
+                  setState(() {
+                    wishlistController.toggleFavorites(product);
+                  });
+                  debugPrint("Length of Fav List : ${wishlistController.favouritesList.length}");
                 },
                 icon: Icon(
                   _favIconState
                       ? Icons.favorite
                       : Icons.favorite_border_outlined,
-                  color: _favIconState
-                      ? Colors.red
-                      : Colors.grey,
+                  color: _favIconState ? Colors.red : null,
                 ),
               ),
               PopupMenuButton(
@@ -158,11 +165,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                     PopupMenuItem(
                       child: const Text('Save to Wishlist'),
                       onTap: () {
-                        if (wishlistController.products.contains(product)) {
-                          debugPrint('product already in wishlist');
-                        } else {
-                          wishlistController.addProductToWishList(product);
-                        }
+                        wishlistController.toggleFavorites(product);
                       },
                     ),
                     PopupMenuItem(
@@ -174,6 +177,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
               ),
             ],
             flexibleSpace: Container(
+              width: size.width,
               child: ListView.builder(
                 itemCount: product.images.length,
                 scrollDirection: Axis.horizontal,
@@ -182,21 +186,28 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                 itemBuilder: (BuildContext context, int imageListIndex) {
                   return Stack(
                     children: [
-                      ClipRRect(
-                        borderRadius: const BorderRadius.only(
-                          bottomRight: Radius.circular(15),
-                          bottomLeft: Radius.circular(15),
+                      GestureDetector(
+                        onTap:(){
+                          Get.to(() => CustomImageViewer(product: product));
+                        },
+                        child: ClipRRect(
+                          borderRadius: const BorderRadius.only(
+                            bottomRight: Radius.circular(15),
+                            bottomLeft: Radius.circular(15),
+                          ),
+                          child:
+                              CachedNetworkImage(
+                            imageUrl: product.images[imageListIndex].originalSrc,
+                            placeholder: (context, url) => Image.asset(
+                                'assets/images/lime-light-logo.png',
+                                fit: BoxFit.cover),
+                            errorWidget: (context, url, error) =>
+                                const Icon(Icons.error),
+                            fit: BoxFit.cover,
+                            height: 375,
+                            width: size.width,
+                          ),
                         ),
-                        child:
-                        Image(
-                          fit: BoxFit.fill,
-                          filterQuality: FilterQuality.high,
-                          width: size.width,
-                          height: 375,
-                          image: NetworkImage(
-                              product.images[imageListIndex].originalSrc),
-                        ),
-
                       ),
                       Positioned(
                         bottom: 10,
@@ -229,11 +240,19 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                   padding: const EdgeInsets.all(10.0),
                   child: Align(
                     alignment: Alignment.centerLeft,
-                    child: Text(
-                      product.title,
-                      style: const TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
+                    child: SizedBox(
+                      width: 200,
+                      child: Flexible(
+                        flex: 2,
+                        fit: FlexFit.loose,
+                        child: Text(
+                          product.title,
+                          softWrap: true,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -300,15 +319,23 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 20.0, vertical: 2),
-                    child: SizedBox(
-                      width: size.width - 30,
-                      height: 110,
-                      child: Text(
-                        '${product.description}',
-                        style: const TextStyle(
-                          fontSize: 15,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Flexible(
+                          fit: FlexFit.loose,
+                          flex: 2,
+                          child: SizedBox(
+                            width: size.width - 30,
+                            child: MarkdownBody(
+                              shrinkWrap: true,
+                              data: markdown,
+                              softLineBreak: true,
+                              fitContent: true,
+                            ),
+                          ),
                         ),
-                      ),
+                      ],
                     ),
                   ),
                 ),
@@ -354,49 +381,63 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                 ),
                 Offstage(
                   offstage: !_optionIconSelected,
-                  child: SizedBox(
-                    width: size.width - 30,
-                    height: _optionsLength > 1 ? 80 : 50,
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: product.option.length,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemBuilder: (_, int optionsListViewIndex) {
-                        return Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 25.0),
-                              child: Text(
-                                product.option[optionsListViewIndex].name,
-                                style: const TextStyle(
-                                  fontSize: 19,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 25.0),
-                              child: Text(
-                                product.option[optionsListViewIndex].values
-                                    .join(','),
-                                style: const TextStyle(
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ],
-                        );
-                      },
-                    ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Flexible(
+                        fit: FlexFit.loose,
+                        flex: 1,
+                        child: SizedBox(
+                          width: size.width - 10,
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: product.option.length,
+                            scrollDirection: Axis.vertical,
+                            itemExtent: 40,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemBuilder: (_, int optionsListViewIndex) {
+                              return Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 25.0),
+                                    child: Text(
+                                      product.option[optionsListViewIndex].name,
+                                      style: const TextStyle(
+                                        fontSize: 19,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20.0),
+                                    child: Text(
+                                      product
+                                          .option[optionsListViewIndex].values
+                                          .join(','),
+                                      style: const TextStyle(
+                                        fontSize: 17,
+                                      ),
+                                      softWrap: true,
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 // Categories Widget
                 Padding(
-                  padding: const EdgeInsets.all(10.0),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 2.0, horizontal: 10),
                   child: InkWell(
                     onTap: () {
                       setState(() {
@@ -467,7 +508,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                 ),
                 // Product Tags Widget
                 Padding(
-                  padding: const EdgeInsets.all(10.0),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 2.0, horizontal: 10),
                   child: InkWell(
                     onTap: () {
                       setState(() {
@@ -547,6 +589,493 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
           // ),
         ],
       ),
+      /*SlidingUpPanel(
+        body: CustomScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          shrinkWrap: true,
+          scrollDirection: Axis.vertical,
+          slivers: [
+            SliverAppBar(
+              expandedHeight: 325,
+              floating: true,
+              pinned: true,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(20),
+                  bottomRight: Radius.circular(20),
+                ),
+              ),
+              leading: GestureDetector(
+                onTap: () {
+                  Get.back();
+                },
+                child: const Icon(
+                  Icons.close,
+                  color: Colors.black,
+                ),
+              ),
+              actions: [
+                IconButton(
+                  onPressed: () {
+                    wishlistController.toggleFavorites(product);
+                    },
+                  icon: Icon(
+                    _favIconState
+                        ? Icons.favorite
+                        : Icons.favorite_border_outlined,
+                    color: _favIconState ? Colors.red : Colors.grey,
+                  ),
+                ),
+                PopupMenuButton(
+                  onSelected: (value) {
+                    // your logic
+                    setState(() {
+                      selectedItem = value.toString();
+                    });
+                    debugPrint(value);
+                    // Navigator.pushNamed(context, value.toString());
+                  },
+                  itemBuilder: (BuildContext context) {
+                    return [
+                      PopupMenuItem(
+                        child: const Text('My Cart'),
+                        onTap: () {
+                          Get.to(() => MainScreen(
+                                selectedIndex: 3,
+                              ));
+                        },
+                      ),
+                      PopupMenuItem(
+                        child: const Text('Save to Wishlist'),
+                        onTap: () {
+                          wishlistController.toggleFavorites(product);
+                        },
+                      ),
+                      PopupMenuItem(
+                        child: const Text('Share'),
+                        onTap: () {},
+                      ),
+                    ];
+                  },
+                ),
+              ],
+              flexibleSpace: Container(
+                child: ListView.builder(
+                  itemCount: product.images.length,
+                  scrollDirection: Axis.horizontal,
+                  shrinkWrap: true,
+                  physics: const PageScrollPhysics(),
+                  itemBuilder: (BuildContext context, int imageListIndex) {
+                    return Stack(
+                      children: [
+                        ClipRRect(
+                          borderRadius: const BorderRadius.only(
+                            bottomRight: Radius.circular(15),
+                            bottomLeft: Radius.circular(15),
+                          ),
+                          child:
+                              // Image(
+                              //   fit: BoxFit.fill,
+                              //   filterQuality: FilterQuality.high,
+                              //   width: size.width,
+                              //   height: 375,
+                              //   image: NetworkImage(
+                              //       product.images[imageListIndex].originalSrc),
+                              // ),
+                              CachedNetworkImage(
+                            imageUrl:
+                                product.images[imageListIndex].originalSrc,
+                            placeholder: (context, url) => Image.asset(
+                                'assets/images/lime-light-logo.png',
+                                fit: BoxFit.cover),
+                            errorWidget: (context, url, error) =>
+                                const Icon(Icons.error),
+                            fit: BoxFit.cover,
+                            height: 375,
+                            width: size.width,
+                          ),
+                        ),
+                        Positioned(
+                          bottom: 10,
+                          right: 10,
+                          child: Text(
+                            "${imageListIndex + 1}/${product.images.length}",
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                ),
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: Column(
+                children: [
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  const Divider(
+                    thickness: 1.2,
+                    color: Colors.grey,
+                    indent: 40,
+                    endIndent: 40,
+                  ),
+                  // Title Widget
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        product.title,
+                        style: const TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                  // Price Widget
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        product.productVariants[0].price.formattedPrice,
+                        style: const TextStyle(
+                          fontSize: 32,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  // Description Widget
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10.0, vertical: 2),
+                    child: InkWell(
+                      onTap: () {
+                        setState(() {
+                          _descriptionIconSelected = !_descriptionIconSelected;
+                        });
+                      },
+                      child: Container(
+                        height: 50,
+                        width: size.width - 20,
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade200,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              const Text(
+                                'Description',
+                                style: TextStyle(
+                                  fontSize: 21,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Icon(_descriptionIconSelected
+                                  ? Icons.keyboard_arrow_up
+                                  : Icons.keyboard_arrow_right),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Offstage(
+                    offstage: !_descriptionIconSelected,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20.0, vertical: 2),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Flexible(
+                            fit: FlexFit.loose,
+                            flex: 2,
+                            child: SizedBox(
+                              width: size.width - 30,
+                              child: MarkdownBody(
+                                shrinkWrap: true,
+                                data: markdown,
+                                softLineBreak: true,
+                                fitContent: true,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  // Additional Information Widget
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10.0, vertical: 2),
+                    child: InkWell(
+                      onTap: () {
+                        setState(() {
+                          _optionIconSelected = !_optionIconSelected;
+                        });
+                      },
+                      child: Container(
+                        height: 50,
+                        width: size.width - 20,
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade200,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              const Text(
+                                'Additional Information',
+                                style: TextStyle(
+                                  fontSize: 21,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Icon(_optionIconSelected
+                                  ? Icons.keyboard_arrow_up
+                                  : Icons.keyboard_arrow_right),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Offstage(
+                    offstage: !_optionIconSelected,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Flexible(
+                          fit: FlexFit.loose,
+                          flex: 1,
+                          child: SizedBox(
+                            width: size.width - 10,
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: product.option.length,
+                              scrollDirection: Axis.vertical,
+                              itemExtent: 40,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemBuilder: (_, int optionsListViewIndex) {
+                                return Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 25.0),
+                                      child: Text(
+                                        product.option[optionsListViewIndex].name,
+                                        style: const TextStyle(
+                                          fontSize: 19,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 20.0),
+                                      child: Text(
+                                        product.option[optionsListViewIndex].values
+                                            .join(','),
+                                        style: const TextStyle(
+                                          fontSize: 17,
+                                        ),
+                                        softWrap: true,
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  // Categories Widget
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 2.0,horizontal: 10),
+                    child: InkWell(
+                      onTap: () {
+                        setState(() {
+                          _categoryIconSelected = !_categoryIconSelected;
+                        });
+                      },
+                      child: Container(
+                        height: 50,
+                        width: size.width - 20,
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade200,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              const Text(
+                                'Categories',
+                                style: TextStyle(
+                                  fontSize: 21,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Icon(_categoryIconSelected
+                                  ? Icons.keyboard_arrow_up
+                                  : Icons.keyboard_arrow_right),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Offstage(
+                    offstage: !_categoryIconSelected,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20.0, vertical: 2),
+                      child: SizedBox(
+                        width: size.width - 30,
+                        height: 40,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          shrinkWrap: true,
+                          itemCount: product.collectionList?.length ?? 0,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemBuilder: (_, int collectionListViewIndex) {
+                            return TextButton(
+                              onPressed: () {},
+                              child: Text(
+                                product.collectionList![collectionListViewIndex]
+                                    .title
+                                    .toString(),
+                                style: const TextStyle(
+                                  color: Colors.blue,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  decoration: TextDecoration.underline,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                  // Product Tags Widget
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 2.0,horizontal: 10),
+                    child: InkWell(
+                      onTap: () {
+                        setState(() {
+                          _tagsIconSelected = !_tagsIconSelected;
+                        });
+                      },
+                      child: Container(
+                        height: 50,
+                        width: size.width - 20,
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade200,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              const Text(
+                                'Product Tags',
+                                style: TextStyle(
+                                  fontSize: 21,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Icon(_tagsIconSelected
+                                  ? Icons.keyboard_arrow_up
+                                  : Icons.keyboard_arrow_right),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Offstage(
+                    offstage: !_tagsIconSelected,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20.0, vertical: 2),
+                      child: SizedBox(
+                        width: size.width - 30,
+                        height: 40,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          shrinkWrap: true,
+                          itemCount: product.tags.length,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemBuilder: (_, int tagsListViewIndex) {
+                            return TextButton(
+                              onPressed: () {},
+                              child: Text(
+                                product.tags[tagsListViewIndex].toString(),
+                                style: const TextStyle(
+                                  color: Colors.blue,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  decoration: TextDecoration.underline,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  // Random space at bottom
+                  const SizedBox(
+                    height: 300,
+                  ),
+                ],
+              ),
+            ),
+            // SliverToBoxAdapter(
+            //   child: Text(product.productVariants[0].price.formattedPrice),
+            // ),
+          ],
+        ),
+        controller: panelController,
+        maxHeight: panelHeightOpen,
+        defaultPanelState: PanelState.CLOSED,
+        minHeight: 0,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+        backdropTapClosesPanel: true,
+        panelBuilder: (controller) {
+          return AddToCartScreen(
+              product: product,
+              controller: controller,
+              panelController: panelController);
+        },
+      ),*/
     );
   }
 }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:lime_light_copy_shopify_store/services/configs.dart';
-import 'package:lime_light_copy_shopify_store/services/connection_singleton.dart';
+import 'package:lime_light_copy_shopify_store/services/connectivity_service.dart';
 import 'package:lime_light_copy_shopify_store/services/init_configs.dart';
 import 'package:lime_light_copy_shopify_store/services/theme_manager.dart';
 import 'package:lime_light_copy_shopify_store/shopify_models/shopify_config.dart';
@@ -10,48 +10,24 @@ import 'package:lime_light_copy_shopify_store/views/cart/cart_screen.dart';
 import 'package:lime_light_copy_shopify_store/views/categories/collections_screen.dart';
 import 'package:lime_light_copy_shopify_store/views/home_ui/home_screen.dart';
 import 'package:lime_light_copy_shopify_store/views/main_ui/main_screen.dart';
+import 'package:lime_light_copy_shopify_store/views/no_internet_screen.dart';
+import 'package:lime_light_copy_shopify_store/views/products_details/product_view_screen.dart';
 import 'package:lime_light_copy_shopify_store/views/search/search_screen.dart';
 import 'package:lime_light_copy_shopify_store/views/settings/settings_screen.dart';
 import 'package:lime_light_copy_shopify_store/views/splash_screen.dart';
 import 'package:provider/provider.dart';
 
-enum Version {
-  lazy,
-  wait
-}
-// Cmd-line args/Env vars: https://stackoverflow.com/a/64686348/2301224
-const String version = String.fromEnvironment('VERSION');
-const Version running = version == "lazy" ? Version.lazy : Version.wait;
-
 
 Future<void> main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
-
-  GlobalConfigs.initConfigs();
-  // if (running == Version.lazy) {
-  //   debugPrint('running LAZY version');
-  //   LazyBindings().dependencies();
-  // }
-  //
-  // if (running == Version.wait) {
-  //   debugPrint('running AWAIT version');
-  //   await AwaitBindings().dependencies(); // await is key here
-  // }
+  //internet check listener
+  await ConnectivityService.instance.checkConnectionForFirstTime();
 
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
       statusBarBrightness: Brightness.dark,
       statusBarIconBrightness: Brightness.dark));
-
-  ConnectionStatusSingleton connectionStatus =
-  ConnectionStatusSingleton.getInstance();
-  connectionStatus.initialize();
-  if(connectionStatus.hasConnection){
-    debugPrint("App has active internet connection.");
-  }else{
-    debugPrint("App is not connected to internet.");
-  }
 
   ShopifyConfig.setConfig(CustomConfig.shopifyStoreFrontAPIAccessToken,
       CustomConfig.shopifyStoreLink, CustomConfig.shopifyApiVersion);
@@ -68,18 +44,11 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
 
-  bool isOffline = false;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-  }
-
-  void connectionChanged(dynamic hasConnection) {
-    setState(() {
-      isOffline = !hasConnection;
-    });
   }
 
   @override
@@ -119,6 +88,7 @@ class _MyAppState extends State<MyApp> {
               ),
               debugShowCheckedModeBanner: false,
               getPages: pagesList,
+              initialBinding: GlobalConfigs(),
               initialRoute: '/splashScreen',
             );
           }),
@@ -133,11 +103,14 @@ class _MyAppState extends State<MyApp> {
               selectedIndex: 0,
             )),
     GetPage(name: '/homeScreen', page: () => HomeScreen()),
-    GetPage(name: '/splashScreen', page: () => SplashScreen()),
+    GetPage(name: '/splashScreen', page: () => const SplashScreen()),
     GetPage(name: '/categoryScreen', page: () => const CategoryScreen()),
     GetPage(name: '/searchScreen', page: () => const SearchScreen()),
     GetPage(name: '/cartScreen', page: () => CartScreen()),
     GetPage(name: '/settings', page: () => const SettingScreen()),
+    GetPage(name: '/newProductScreen', page: () => const ProductViewScreen()),
+    GetPage(name: '/noInternetScreen', page: () => const NoInternetScreen()),
+
     // GetPage(name: '/productDetailsScreen', page: () => const ProductDetailScreen(productID: "7356346499269")),
   ];
 }

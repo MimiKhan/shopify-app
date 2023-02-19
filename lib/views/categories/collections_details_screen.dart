@@ -56,7 +56,7 @@ class _CollectionDetailScreenState extends State<CollectionDetailScreen>
 
   void _scrollToTop() {
     _scrollController.animateTo(0,
-        duration: const Duration(seconds: 2), curve: Curves.linear);
+        duration: const Duration(milliseconds: 500), curve: Curves.decelerate);
   }
 
   void _navigateToProductDetailScreen(Product product) {
@@ -208,33 +208,19 @@ class _CollectionDetailScreenState extends State<CollectionDetailScreen>
                                             ),
                                           ),
                                         ),
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 5.0, vertical: 5),
-                                          child: Align(
-                                              alignment: Alignment.centerLeft,
-                                              child: Text(
-                                                products[gridViewIndex].title,
-                                                style: const TextStyle(
-                                                  fontSize: 14,
-                                                  color: Colors.black,
-                                                ),
-                                                softWrap: true,
-                                              )),
-                                        ),
                                         const SizedBox(
-                                          height: 5,
+                                          height: 10,
                                         ),
                                         Padding(
                                           padding: const EdgeInsets.symmetric(
                                               horizontal: 5.0),
                                           child: Align(
-                                            alignment: Alignment.centerLeft,
+                                            alignment: Alignment.topLeft,
                                             child: Column(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.start,
+                                              MainAxisAlignment.center,
                                               crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
+                                              CrossAxisAlignment.center,
                                               children: [
                                                 Text(
                                                   products[gridViewIndex]
@@ -245,38 +231,81 @@ class _CollectionDetailScreenState extends State<CollectionDetailScreen>
                                                       color: Colors.black,
                                                       fontSize: 18,
                                                       fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                                Text(
-                                                  products[gridViewIndex]
-                                                              .productVariants[
-                                                                  0]
-                                                              .quantityAvailable >
-                                                          0
-                                                      ? quantityAvailable < 10
-                                                          ? 'Only $quantityAvailable available'
-                                                          : 'In Stock'
-                                                      : 'Out of Stock',
-                                                  style: TextStyle(
-                                                    color: products[gridViewIndex]
-                                                                .productVariants[
-                                                                    0]
-                                                                .quantityAvailable >
-                                                            0
-                                                        ? Colors.green
-                                                        : Colors.red,
-                                                  ),
+                                                      FontWeight.bold),
                                                 ),
                                               ],
                                             ),
                                           ),
                                         ),
-                                        IconButton(
-                                          onPressed: () {},
-                                          icon: const Icon(
-                                              Icons.add_shopping_cart_outlined),
-                                          iconSize: 30,
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 5.0, vertical: 5),
+                                          child: Align(
+                                              alignment: Alignment.centerLeft,
+                                              child: Text(
+                                                products[gridViewIndex].title,
+                                                style: const TextStyle(
+                                                  fontSize: 12,
+                                                  color: Colors.black,
+                                                ),
+                                                softWrap: true,
+                                              )),
                                         ),
+                                        // const SizedBox(
+                                        //   height: 10,
+                                        // ),
+                                        // Padding(
+                                        //   padding: const EdgeInsets.symmetric(
+                                        //       horizontal: 5.0),
+                                        //   child: Align(
+                                        //     alignment: Alignment.bottomCenter,
+                                        //     child: Column(
+                                        //       mainAxisAlignment:
+                                        //           MainAxisAlignment.center,
+                                        //       crossAxisAlignment:
+                                        //           CrossAxisAlignment.center,
+                                        //       children: [
+                                        //         Text(
+                                        //           products[gridViewIndex]
+                                        //               .productVariants[0]
+                                        //               .price
+                                        //               .formattedPrice,
+                                        //           style: const TextStyle(
+                                        //               color: Colors.black,
+                                        //               fontSize: 18,
+                                        //               fontWeight:
+                                        //                   FontWeight.bold),
+                                        //         ),
+                                        //         /*Text(
+                                        //           products[gridViewIndex]
+                                        //                       .productVariants[
+                                        //                           0]
+                                        //                       .quantityAvailable! >
+                                        //                   0
+                                        //               ? quantityAvailable! < 10
+                                        //                   ? 'Only $quantityAvailable available'
+                                        //                   : 'In Stock'
+                                        //               : 'Out of Stock',
+                                        //           style: TextStyle(
+                                        //             color: products[gridViewIndex]
+                                        //                         .productVariants[
+                                        //                             0]
+                                        //                         .quantityAvailable! >
+                                        //                     0
+                                        //                 ? Colors.green
+                                        //                 : Colors.red,
+                                        //           ),
+                                        //         ),*/
+                                        //       ],
+                                        //     ),
+                                        //   ),
+                                        // ),
+                                        // IconButton(
+                                        //   onPressed: () {},
+                                        //   icon: const Icon(
+                                        //       Icons.add_shopping_cart_outlined),
+                                        //   iconSize: 30,
+                                        // ),
                                       ],
                                     ),
                                   ),

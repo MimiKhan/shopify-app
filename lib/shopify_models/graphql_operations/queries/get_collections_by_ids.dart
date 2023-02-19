@@ -6,10 +6,9 @@ query getCollectionsByIds($ids: [ID!]!){
       handle
       descriptionHtml
       image {
-        src
+        url
         originalSrc
         id
-        altText
       }
       title
       updatedAt

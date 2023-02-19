@@ -14,8 +14,8 @@ query($cursor: String, $sortKey: CollectionSortKeys, $reverse: Boolean){
         id
         updatedAt
         image {
-          altText
           id
+          url
           originalSrc
         }
         products(first: 250) {
@@ -26,8 +26,8 @@ query($cursor: String, $sortKey: CollectionSortKeys, $reverse: Boolean){
                   node {
                     title
                     image {
-                      altText
                       id
+                      url
                       originalSrc
                     }
                     priceV2 {
@@ -72,8 +72,8 @@ query($cursor: String, $sortKey: CollectionSortKeys, $reverse: Boolean){
               images(first: 10) {
                 edges {
                   node {
-                    altText
                     id
+                    url
                     originalSrc
                   }
                 }

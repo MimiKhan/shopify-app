@@ -1,9 +1,111 @@
+import 'dart:convert';
+
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:lime_light_copy_shopify_store/shopify_models/models/src/product/product.dart';
+import 'package:lime_light_copy_shopify_store/models/country_data_model.dart';
+import 'package:lime_light_copy_shopify_store/shopify_models/flutter_simple_shopify.dart';
+import 'package:lime_light_copy_shopify_store/shopify_models/models/src/order/discount_allocations/discount_allocations.dart';
+import 'package:lime_light_copy_shopify_store/shopify_models/models/src/product/price_v_2/price_v_2.dart';
+import 'package:lime_light_copy_shopify_store/views/cart/cart_model.dart';
 
 class CartController extends GetxController {
-  final Map<Product, int> _cartItems = <Product, int>{}.obs;
+  var cartModelItems = <CartModel>[].obs;
+  var cartModelItemsSelected = <CartModel>[].obs;
 
+  var lineItemsFromCart = <LineItem>[].obs;
+
+  int get cartModelItemsCount => cartModelItems.length;
+
+  var countryData = <CountryDataModel>[].obs;
+
+  @override
+  onInit() async {
+    super.onInit();
+    await getCountryData().then((value) => countryData.value = value);
+  }
+
+  Future<List<CountryDataModel>> getCountryData() async {
+    await Future.delayed(const Duration(seconds: 1));
+    final jsonData =
+        await rootBundle.loadString('assets/json/country_data.json');
+    final jsonList = jsonDecode(jsonData) as List<dynamic>;
+
+    return jsonList.map((e) => CountryDataModel.fromJson(e)).toList();
+  }
+
+  Future<List<LineItem>> getLineItems(
+      List<CartModel> cartModelItemsList) async {
+    for (var cartModelItem in cartModelItemsList) {
+      lineItemsFromCart.add(LineItem(
+        title: cartModelItem.product.title,
+        quantity: cartModelItem.quantity,
+        discountAllocations: [
+          DiscountAllocations(
+            allocatedAmount: PriceV2(amount: 0.0, currencyCode: 'USD'),
+          ),
+        ],
+        variantId: cartModelItem.productVariant.id,
+      ));
+    }
+    update();
+    return lineItemsFromCart.value;
+  }
+
+  void addItem(CartModel item) {
+    if (cartModelItems.any((i) {
+      return i.product.id == item.product.id &&
+          i.productVariant.id == item.productVariant.id;
+    })) {
+      // Item already exists in the cart, update its quantity instead
+      updateQuantity(item, item.quantity + 1);
+    } else {
+      cartModelItems.add(item);
+    }
+  }
+
+  void updateQuantity(CartModel item, int newQuantity) {
+    int index = cartModelItems.indexOf(item);
+    if (index >= 0) {
+      cartModelItems[index].quantity = newQuantity;
+    }
+  }
+
+  void removeItem(CartModel item) {
+    cartModelItems.remove(item);
+    update();
+  }
+
+  void increaseQuantity(CartModel cartItem) {
+    cartItem.quantity++;
+    update();
+  }
+
+  void decreaseQuantity(CartModel cartItem) {
+    if (cartItem.quantity > 1) {
+      cartItem.quantity--;
+    } else {
+      cartModelItems.remove(cartItem);
+    }
+    update();
+  }
+
+  double get totalCost {
+    double cost = 0;
+    for (var item in cartModelItems) {
+      cost += item.productVariant.price.amount * item.quantity;
+    }
+    return cost;
+  }
+
+  double get totalCostSelectedItem {
+    double cost = 0;
+    for (var item in cartModelItemsSelected) {
+      cost += item.productVariant.price.amount * item.quantity;
+    }
+    return cost;
+  }
+
+/*final Map<Product, int> _cartItems = <Product, int>{}.obs;
   Map<Product, int> get cartItems => _cartItems;
 
   void addProduct(Product product) {
@@ -40,10 +142,8 @@ class CartController extends GetxController {
       sum += product.productVariants.first.price.amount * quantity;
     });
     return sum;
-  }
+  }*/
 }
-
-
 
 /*class CartController extends GetxController {
   var cartItems = <Product>[].obs;

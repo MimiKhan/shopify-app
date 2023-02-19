@@ -1,25 +1,24 @@
 import 'package:flag/flag.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
+import 'package:lime_light_copy_shopify_store/controllers/settings_controller.dart';
 
-class LanguageSelectionScreen extends StatefulWidget {
-  static String selectedLanguage = '';
-  static var selectedLanguageIcon;
+class LanguageSelectionScreen extends StatelessWidget {
 
-  const LanguageSelectionScreen({Key? key}) : super(key: key);
+  LanguageSelectionScreen({Key? key}) : super(key: key);
 
-  @override
-  State<LanguageSelectionScreen> createState() =>
-      _LanguageSelectionScreenState();
-}
+  final settingsController = Get.find<SettingsController>();
 
-class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(LanguageSelectionScreen.selectedLanguage),
+        title: GetX<SettingsController>(
+          builder: (controller) {
+            return Text(controller.selectedLanguage.value);
+          }
+        ),
       ),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
@@ -156,8 +155,10 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
         width: 38,
       ),
       onTap: () {
-        LanguageSelectionScreen.selectedLanguage = title;
-        LanguageSelectionScreen.selectedLanguageIcon = flagCode;
+        settingsController.selectedLanguage.value = title;
+        settingsController.selectedLanguageIcon.value = flagCode;
+        // LanguageSelectionScreen.selectedLanguage = title;
+        // LanguageSelectionScreen.selectedLanguageIcon = flagCode;
         Navigator.pop(context);
       },
     );

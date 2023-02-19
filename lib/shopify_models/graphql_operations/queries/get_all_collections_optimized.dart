@@ -14,8 +14,8 @@ query($cursor: String, $sortKey: CollectionSortKeys, $reverse: Boolean){
         id
         updatedAt
         image {
-          altText
           id
+          url
           originalSrc
         }
       }

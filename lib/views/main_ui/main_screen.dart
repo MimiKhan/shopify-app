@@ -1,20 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:badges/badges.dart' as badges;
 import 'package:get/get.dart';
 import 'package:lime_light_copy_shopify_store/controllers/cart_controller.dart';
-import 'package:lime_light_copy_shopify_store/controllers/collections_list_controller.dart';
-import 'package:lime_light_copy_shopify_store/controllers/home_controller.dart';
-import 'package:lime_light_copy_shopify_store/controllers/product_controller.dart';
-import 'package:lime_light_copy_shopify_store/controllers/products_list_controller.dart';
-import 'package:lime_light_copy_shopify_store/controllers/wish_list_controller.dart';
+import 'package:lime_light_copy_shopify_store/controllers/check_internet_controller.dart';
 import 'package:lime_light_copy_shopify_store/services/hex_color.dart';
+import 'package:lime_light_copy_shopify_store/services/network_info.dart';
 import 'package:lime_light_copy_shopify_store/views/cart/cart_screen.dart';
+import 'package:lime_light_copy_shopify_store/views/cart/cart_screen2.0.dart';
 import 'package:lime_light_copy_shopify_store/views/categories/collections_screen.dart';
 import 'package:lime_light_copy_shopify_store/views/home_ui/home_screen.dart';
 import 'package:lime_light_copy_shopify_store/views/search/search_screen.dart';
 import 'package:lime_light_copy_shopify_store/views/settings/settings_screen.dart';
+import 'package:lime_light_copy_shopify_store/widgets/exit_popup.dart';
 
 import 'bottom_tabs.dart';
 
@@ -28,7 +26,6 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
-
   // For Google Nav Bar
   var _bottomNavIndex = 0; //default index of a first screen
 
@@ -39,32 +36,14 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   late CurvedAnimation fabCurve;
   late CurvedAnimation borderRadiusCurve;
 
-  // final homeController = Get.find<HomeController>();
-  // final wishListController = Get.find<WishListController>();
-  // final cartController = Get.find<CartController>();
-  // final productController = Get.find<ProductController>();
-  // final productListController = Get.find<ProductsListController>();
-  // final collectionsListController = Get.find<CollectionsListController>();
-
-  /*var iconList = <Widget>[
-    const Icon(Icons.home_filled),
-    const Icon(Icons.category_outlined),
-    const Icon(Icons.search_outlined),
-    Badge(
-      label: GetX<CartController>(builder: (controller) {
-        return Text(controller.itemsCount.toString());
-      }),
-      isLabelVisible: true,
-      child: const Icon(CupertinoIcons.bag),
-    ),
-    const Icon(CupertinoIcons.settings),
-  ];*/
+  final cartController = Get.find<CartController>();
+  final internetController = Get.find<InternetCheckController>();
 
   var pagesList = [
     HomeScreen(),
     const CategoryScreen(),
     const SearchScreen(),
-    CartScreen(),
+    CartScreen2(),
     const SettingScreen(),
   ];
 
@@ -80,13 +59,8 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _onItemTapped(widget.selectedIndex);
 
-    // final systemTheme = SystemUiOverlayStyle.light.copyWith(
-    //   systemNavigationBarColor: HexColor('#373A36'),
-    //   systemNavigationBarIconBrightness: Brightness.light,
-    // );
-    // SystemChrome.setSystemUIOverlayStyle(systemTheme);
+    _onItemTapped(widget.selectedIndex);
 
     _fabAnimationController = AnimationController(
       duration: const Duration(milliseconds: 500),
@@ -109,11 +83,6 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
     borderRadiusAnimation = Tween<double>(begin: 0, end: 1).animate(
       borderRadiusCurve,
     );
-
-    // _hideBottomBarAnimationController = AnimationController(
-    //   duration: const Duration(milliseconds: 200),
-    //   vsync: this,
-    // );
 
     Future.delayed(
       const Duration(seconds: 1),
@@ -169,7 +138,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
           elevation: 0,
         ),
         badgeContent: GetX<CartController>(builder: (controller) {
-          return Text(controller.cartItems.length.toString());
+          return Text(controller.cartModelItemsCount.toString());
         }),
         child: const Icon(CupertinoIcons.cart),
       ),
@@ -184,33 +153,20 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        extendBody: true,
-        resizeToAvoidBottomInset: true,
-        bottomNavigationBar: buildNavigationBar(),
-        // floatingActionButton: FloatingActionButton.extended(
-        //   onPressed: () {},
-        //   icon: const Icon(CupertinoIcons.bag_fill),
-        //   label: GetX<CartController>(builder: (controller) {
-        //     return Text(
-        //       controller.itemsCount.toString(),
-        //       style: const TextStyle(color: Colors.black, fontSize: 24),
-        //     );
-        //   }),
-        // ),
-        body:
-            // NotificationListener<ScrollNotification>(
-            //   onNotification: onScrollNotification,
-            //   child:
-            //     IndexedStack(
-            //   index: widget.selectedIndex,
-            //   children: [
-            //     for (final tabItem in items) tabItem.page,
-            //   ],
-            // ),
-            pagesList[widget.selectedIndex]
-        // ),
-        );
+    return WillPopScope(
+      onWillPop: () => showExitPopup(context),
+      child: Obx(() {
+        if (internetController.isOnline) {
+          return Scaffold(
+              extendBody: true,
+              resizeToAvoidBottomInset: true,
+              bottomNavigationBar: buildNavigationBar(),
+              body: pagesList[widget.selectedIndex]);
+        } else {
+          return internetController.getErrorWidget();
+        }
+      }),
+    );
   }
 
   buildNavigationBar() {
@@ -252,7 +208,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
                     badges.Badge(
                       badgeContent: GetX<CartController>(builder: (controller) {
                         return Text(
-                          controller.cartItems.length.toString(),
+                          controller.cartModelItemsCount.toString(),
                         );
                       }),
                       showBadge: true,
@@ -298,34 +254,4 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
       currentIndex: widget.selectedIndex,
     );
   }
-
-/*AnimatedBottomNavigationBar buildAnimatedBottomNavBar() {
-    return AnimatedBottomNavigationBar.builder(
-      gapWidth: 2,
-      itemCount: iconList.length,
-      tabBuilder: (int index, bool isActive) {
-        // final color = isActive ? HexColor('#F47B68') : HexColor('#687eaf');
-        return Container(
-          width: 60,
-          height: 60,
-          decoration: const BoxDecoration(
-            shape: BoxShape.circle,
-          ),
-          child: iconList[index],
-        );
-      },
-      height: 70,
-      backgroundColor: Colors.white,
-      activeIndex: _bottomNavIndex,
-      notchAndCornersAnimation: borderRadiusAnimation,
-      splashSpeedInMilliseconds: 300,
-      notchSmoothness: NotchSmoothness.defaultEdge,
-      gapLocation: GapLocation.end,
-      leftCornerRadius: 0,
-      rightCornerRadius: 0,
-      elevation: 0,
-      onTap: _onItemTapped,
-      // hideAnimationController: _hideBottomBarAnimationController,
-    );
-  }*/
 }

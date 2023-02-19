@@ -10,8 +10,8 @@ query getProductRecommentationsQuery($id: ID!){
     images(first: 250) {
       edges {
         node {
-          altText
           id
+          url
           originalSrc
         }
       }
@@ -34,8 +34,8 @@ query getProductRecommentationsQuery($id: ID!){
           id
           title
           image {
-            altText
             id
+            url
             originalSrc
           }
           priceV2 {

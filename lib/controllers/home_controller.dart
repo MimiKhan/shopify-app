@@ -12,41 +12,42 @@ class HomeController extends GetxController {
   int get productsCount => bestSellingProducts.length;
   int get collectionsCount => collections.length;
 
-  // @override
-  // void onInit() {
-  //   super.onInit();
-  //   initData();
-  // }
+  @override
+  void onInit() {
+    super.onInit();
+    initData();
+  }
 
 
 
   Future<void> initData() async{
-    bestSellingProducts.value = (await _fetchProducts())!;
-    collections.value = (await _fetchCollections())!;
+    // bestSellingProducts.value = (await _fetchProducts())!;
+    // collections.value = (await _fetchCollections())!;
+    _fetchProducts();
+    _fetchCollections();
   }
 
-  Future<List<Product>?> _fetchProducts() async {
+  Future<void> _fetchProducts() async {
     try {
       // Future.delayed(const Duration(seconds: 1));
       final shopifyStore = ShopifyStore.instance;
       var bestSellingProducts = await shopifyStore.getNProducts(10,
-              sortKey: SortKeyProduct.BEST_SELLING);
-      return bestSellingProducts;
-    } catch (e) {
-      debugPrint(e.toString());
+              sortKey: SortKeyProduct.RELEVANCE);
+      debugPrint(bestSellingProducts!.first.toString());
+      this.bestSellingProducts.value = bestSellingProducts;
+    } catch (exception) {
+      debugPrint(exception.toString());
     }
-    return null;
   }
 
-  Future<List<Collection>?> _fetchCollections() async {
+  Future<void> _fetchCollections() async {
     try {
       final shopifyStore = ShopifyStore.instance;
       final collections = await shopifyStore.getAllCollections(
           sortKeyCollection: SortKeyCollection.UPDATED_AT);
-      return collections;
+      this.collections.value = collections;
     } catch (e) {
       debugPrint(e.toString());
     }
-    return null;
   }
 }

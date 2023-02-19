@@ -9,8 +9,8 @@ class ShopifyImage with _$ShopifyImage {
 
   factory ShopifyImage({
     required String originalSrc,
+    required String url,
     required String id,
-    String? altText,
   }) = _ShopifyImage;
 
   factory ShopifyImage.fromJson(Map<String, dynamic> json) =>

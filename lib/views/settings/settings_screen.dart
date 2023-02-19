@@ -2,7 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:lime_light_copy_shopify_store/controllers/settings_controller.dart';
 import 'package:lime_light_copy_shopify_store/controllers/wish_list_controller.dart';
+import 'package:lime_light_copy_shopify_store/views/notifications_screen.dart';
 import 'package:lime_light_copy_shopify_store/views/wish_list_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:flag/flag.dart';
@@ -20,6 +22,7 @@ class SettingScreen extends StatefulWidget {
 
 class _SettingScreenState extends State<SettingScreen> {
   final wishListController = Get.find<WishListController>();
+  final settingsController = Get.find<SettingsController>();
 
   var notificationSwitchIsEnabled = false;
   var scaffoldKey = GlobalKey<ScaffoldState>();
@@ -31,15 +34,15 @@ class _SettingScreenState extends State<SettingScreen> {
 
   _setCurrencyName() {
     setState(() {
-      currencyName = CurrencySelectionScreen.selectedCurrency;
-      currencyName = CurrencySelectionScreen.selectedCurrencyIcon;
+      currencyName = settingsController.selectedCurrency.value;
+      currencyIcon = settingsController.selectedCurrencyIcon.value;
     });
   }
 
   _setLanguageName() {
     setState(() {
-      languageName = LanguageSelectionScreen.selectedLanguage;
-      flagCode = LanguageSelectionScreen.selectedLanguageIcon;
+      languageName = settingsController.selectedLanguage.value;
+      flagCode = settingsController.selectedLanguageIcon.value;
     });
   }
 
@@ -115,7 +118,9 @@ class _SettingScreenState extends State<SettingScreen> {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 30.0, vertical: 20.0),
                     child: InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        Get.toNamed('/newProductScreen');
+                      },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -194,14 +199,14 @@ class _SettingScreenState extends State<SettingScreen> {
                           Row(
                             children: [
                               Text(
-                                wishListController.products.isNotEmpty
+                                wishListController.favouritesList.value.isNotEmpty
                                     ? wishListController.itemsCount == 1
                                         ? '${wishListController.itemsCount} Product'
                                         : '${wishListController.itemsCount} Products'
                                     : '',
                                 style: TextStyle(
                                   fontSize: 15,
-                                  color: wishListController.products.isNotEmpty
+                                  color: wishListController.favouritesList.value.isNotEmpty
                                       ? Colors.green
                                       : Colors.black,
                                 ),
@@ -283,7 +288,9 @@ class _SettingScreenState extends State<SettingScreen> {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 30.0, vertical: 5.0),
                           child: InkWell(
-                            onTap: () {},
+                            onTap: () {
+                              Get.to(()=>const NotificationsScreen());
+                            },
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.center,

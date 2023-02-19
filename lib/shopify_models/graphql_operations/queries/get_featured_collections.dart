@@ -10,8 +10,8 @@ query getFeaturedCollectionQuery($query: String!){
         id
         updatedAt
         image {
-          altText
           id
+          url
           originalSrc
         }
         products(first: 20) {
@@ -22,8 +22,8 @@ query getFeaturedCollectionQuery($query: String!){
                   node {
                     title
                     image {
-                      altText
                       id
+                      url
                       originalSrc
                     }
                     priceV2 {
@@ -68,8 +68,8 @@ query getFeaturedCollectionQuery($query: String!){
               images(first: 10) {
                 edges {
                   node {
-                    altText
                     id
+                    url
                     originalSrc
                   }
                 }

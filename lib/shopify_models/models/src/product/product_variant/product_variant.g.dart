@@ -13,10 +13,10 @@ _$_ProductVariant _$$_ProductVariantFromJson(Map<String, dynamic> json) =>
       weight: (json['weight'] as num).toDouble(),
       weightUnit: json['weightUnit'] as String,
       availableForSale: json['availableForSale'] as bool,
-      sku: json['sku'] as String,
+      sku: json['sku'] as String?,
       requiresShipping: json['requiresShipping'] as bool,
       id: json['id'] as String,
-      quantityAvailable: json['quantityAvailable'] as int,
+      quantityAvailable: json['quantityAvailable'] as int?,
       unitPrice: json['unitPrice'] == null
           ? null
           : PriceV2.fromJson(json['unitPrice'] as Map<String, dynamic>),

@@ -18,8 +18,8 @@ query($n : Int, $sortKey : ProductSortKeys, $reverse: Boolean){
               id
               title
               image {
-                altText
                 id
+                url
                 originalSrc
               }
               priceV2 {
@@ -74,8 +74,8 @@ query($n : Int, $sortKey : ProductSortKeys, $reverse: Boolean){
         images(first: 250) {
           edges {
             node {
-              altText
               id
+              url
               originalSrc
             }
           }

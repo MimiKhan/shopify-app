@@ -7,11 +7,19 @@ import 'package:lime_light_copy_shopify_store/controllers/login_controller.dart'
 import 'package:lime_light_copy_shopify_store/views/checkout/pre_checkout_screen.dart';
 import 'package:lime_light_copy_shopify_store/views/login/pages/login_page.dart';
 
-class CartScreen2 extends StatelessWidget {
+class CartScreen2 extends StatefulWidget {
   CartScreen2({Key? key}) : super(key: key);
 
+  @override
+  State<CartScreen2> createState() => _CartScreen2State();
+}
+
+class _CartScreen2State extends State<CartScreen2> {
   final cartController = Get.find<CartController>();
+
   final loginController = Get.find<LoginController>();
+
+  bool userLoggedIn = false;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +35,42 @@ class CartScreen2 extends StatelessWidget {
       ),
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: Stack(
+        child: cartController.cartModelItems.isEmpty?
+        Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 35.0),
+                child: Text('Your Cart is Empty',
+                    style: TextStyle(fontSize: 20)),
+              ),
+              Container(
+                width: 180,
+                height: 50,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  color: Colors.black,
+                ),
+                child: ElevatedButton(
+                  onPressed: () {
+                    Get.offNamed('/mainScreen');
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.black,
+                  ),
+                  child: const Text(
+                    'Start Shopping',
+                    style: TextStyle(
+                        color: Colors.white, fontSize: 20),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ):
+        Stack(
           children: [
             GetX<CartController>(builder: (controller) {
               return SizedBox(
@@ -153,26 +196,22 @@ class CartScreen2 extends StatelessWidget {
                                                           const SizedBox(
                                                             height: 10,
                                                           ),
-                                                          SizedBox(
+                                                          Container(
                                                             width: 200,
-                                                            child: Flexible(
-                                                              fit:
-                                                                  FlexFit.loose,
-                                                              flex: 2,
-                                                              child: Text(
-                                                                cartModelElement
-                                                                    .product
-                                                                    .title,
-                                                                softWrap: true,
-                                                                style: const TextStyle(
-                                                                    color: Colors
-                                                                        .black,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w600,
-                                                                    fontSize:
-                                                                        14),
-                                                              ),
+                                                            height: 50,
+                                                            child: Text(
+                                                              cartModelElement
+                                                                  .product
+                                                                  .title,
+                                                              softWrap: true,
+                                                              style: const TextStyle(
+                                                                  color: Colors
+                                                                      .black,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600,
+                                                                  fontSize:
+                                                                      14),
                                                             ),
                                                           ),
                                                           const SizedBox(
@@ -350,158 +389,138 @@ class CartScreen2 extends StatelessWidget {
                                           )));
                                 }).toList(),
                               ))
-                    else
-                      Column(
-                        children: [
-                          const Center(
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(vertical: 35.0),
-                              child: Text('Your Cart is Empty',
-                                  style: TextStyle(fontSize: 20)),
-                            ),
-                          ),
-                          Container(
-                            width: 180,
-                            height: 50,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                              color: Colors.black,
-                            ),
-                            child: ElevatedButton(
-                              onPressed: () {
-                                Get.offNamed('/mainScreen');
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.black,
-                              ),
-                              child: const Text(
-                                'Start Shopping',
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 20),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+
                   ],
                 ),
               );
             }),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                width: size.width,
-                height: 140,
-                color: Colors.grey,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 15.0, vertical: 10),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            'Total',
-                            style:
-                                TextStyle(color: Colors.black45, fontSize: 24),
-                          ),
-                          GetX<CartController>(builder: (controller) {
-                            return Row(
-                              children: [
-                                const Icon(
-                                  CupertinoIcons.money_dollar,
-                                  size: 28,
-                                  color: Colors.orange,
-                                ),
-                                Text(
-                                  controller.totalCost.toStringAsFixed(2),
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 24,
-                                  ),
-                                ),
-                              ],
-                            );
-                          }),
-                        ],
-                      ),
-                      ElevatedButton(
-                        onPressed: () {
-                          if (cartController.cartModelItems.isEmpty) {
-                            showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return AlertDialog(
-                                    title: const Text('Cart Empty'),
-                                    content: const Text(
-                                        'You must add products to cart for checkout.'),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () {
-                                          Get.back();
-                                        },
-                                        child: const Text('OK'),
-                                      ),
-                                    ],
-                                  );
-                                });
-                          }
-
-                          if (loginController.currentUser.id!.isNotEmpty) {
-                            Get.to(() => PreCheckoutScreen(
-                                cartModelItems:
-                                    cartController.cartModelItems.value));
-                          } else {
-                            showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return AlertDialog(
-                                    title: const Text('Warning'),
-                                    content: const Text(
-                                        'You must log in to complete checkout.'),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () {
-                                          Get.to(() => LoginPage(previousPage: "cartScreen"));
-                                        },
-                                        child: const Text('Login'),
-                                      ),
-                                      TextButton(
-                                        onPressed: () {
-                                          Get.back();
-                                        },
-                                        child: const Text('Cancel'),
-                                      ),
-                                    ],
-                                  );
-                                });
-                          }
-                        },
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.black,
-                            foregroundColor: Colors.white,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15),
+            if (cartController.cartModelItems.isNotEmpty)
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: SizedBox(
+                  width: size.width,
+                  height: 140,
+                  // color: Colors.grey,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 15.0, vertical: 10),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text(
+                              'Total',
+                              style: TextStyle(
+                                  color: Colors.black45, fontSize: 24),
                             ),
-                            elevation: 10,
-                            minimumSize: Size(size.width - 21, 50)),
-                        child: const Text(
-                          'Checkout',
-                          style: TextStyle(
-                            fontSize: 24,
+                            GetX<CartController>(builder: (controller) {
+                              return Row(
+                                children: [
+                                  const Icon(
+                                    CupertinoIcons.money_dollar,
+                                    size: 28,
+                                    color: Colors.orange,
+                                  ),
+                                  Text(
+                                    controller.totalCost.toStringAsFixed(2),
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 24,
+                                    ),
+                                  ),
+                                ],
+                              );
+                            }),
+                          ],
+                        ),
+                        ElevatedButton(
+                          onPressed: () async {
+                            if (cartController.cartModelItems.isEmpty) {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      title: const Text('Cart Empty'),
+                                      content: const Text(
+                                          'You must add products to cart for checkout.'),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () {
+                                            Get.back();
+                                          },
+                                          child: const Text('OK'),
+                                        ),
+                                      ],
+                                    );
+                                  });
+                            }
+
+                            userLoggedIn = await checkUserFromShopify();
+                            debugPrint("User : $userLoggedIn :");
+                            if (userLoggedIn) {
+                              Get.to(() => PreCheckoutScreen(
+                                  cartModelItems:
+                                      cartController.cartModelItems.value));
+                            } else {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      title: const Text('Warning'),
+                                      content: const Text(
+                                          'Do you want to sign in or continue as guest'),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () {
+                                            Get.to(() => LoginPage(
+                                                loginRoute: LoginRoute.cartScreen));
+                                          },
+                                          child: const Text('Login'),
+                                        ),
+                                        TextButton(
+                                          onPressed: () {
+                                            Get.back();
+                                          },
+                                          child: const Text('Cancel'),
+                                        ),
+                                      ],
+                                    );
+                                  });
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.black,
+                              foregroundColor: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              elevation: 10,
+                              minimumSize: Size(size.width - 21, 50)),
+                          child: const Text(
+                            'Checkout',
+                            style: TextStyle(
+                              fontSize: 24,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            )
+              )
           ],
         ),
       ),
     );
+  }
+
+  Future<bool> checkUserFromShopify() async{
+    var user = await loginController.checkUser();
+    if(user?.id == null){
+      return false;
+    }
+    return true;
   }
 }

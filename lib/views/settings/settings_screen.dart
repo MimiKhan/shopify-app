@@ -2,16 +2,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:lime_light_copy_shopify_store/controllers/login_controller.dart';
 import 'package:lime_light_copy_shopify_store/controllers/settings_controller.dart';
 import 'package:lime_light_copy_shopify_store/controllers/wish_list_controller.dart';
-import 'package:lime_light_copy_shopify_store/views/notifications_screen.dart';
-import 'package:lime_light_copy_shopify_store/views/wish_list_screen.dart';
+import 'package:lime_light_copy_shopify_store/theme/app_style.dart';
+import 'package:lime_light_copy_shopify_store/views/login/pages/login_page.dart';
+import 'package:lime_light_copy_shopify_store/views/others/wish_list_screen.dart';
+import 'package:lime_light_copy_shopify_store/views/profile/profile_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:flag/flag.dart';
 import 'package:lime_light_copy_shopify_store/services/theme_manager.dart';
 import 'package:lime_light_copy_shopify_store/views/main_ui/main_screen.dart';
-import 'package:lime_light_copy_shopify_store/views/settings/currency_selection_screen.dart';
-import 'package:lime_light_copy_shopify_store/views/settings/language_selection_screen.dart';
 
 class SettingScreen extends StatefulWidget {
   const SettingScreen({Key? key}) : super(key: key);
@@ -23,6 +24,7 @@ class SettingScreen extends StatefulWidget {
 class _SettingScreenState extends State<SettingScreen> {
   final wishListController = Get.find<WishListController>();
   final settingsController = Get.find<SettingsController>();
+  final loginController = Get.find<LoginController>();
 
   var notificationSwitchIsEnabled = false;
   var scaffoldKey = GlobalKey<ScaffoldState>();
@@ -31,20 +33,6 @@ class _SettingScreenState extends State<SettingScreen> {
   var currencyIcon = FontAwesomeIcons.dollarSign;
   String languageName = 'English';
   var flagCode = FlagsCode.GB;
-
-  _setCurrencyName() {
-    setState(() {
-      currencyName = settingsController.selectedCurrency.value;
-      currencyIcon = settingsController.selectedCurrencyIcon.value;
-    });
-  }
-
-  _setLanguageName() {
-    setState(() {
-      languageName = settingsController.selectedLanguage.value;
-      flagCode = settingsController.selectedLanguageIcon.value;
-    });
-  }
 
   @override
   void initState() {
@@ -111,47 +99,111 @@ class _SettingScreenState extends State<SettingScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   const SizedBox(
-                    height: 10,
+                    height: 40,
                   ),
-                  // Login Button
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 30.0, vertical: 20.0),
-                    child: InkWell(
-                      onTap: () {
-                        Get.toNamed('/newProductScreen');
+
+                  if (loginController.currentUser?.id != null)
+                    GestureDetector(
+                      onTap: (){
+                        debugPrint("Customer Access Token : ${loginController.userAccessToken.value.toString()} :");
+                        Get.to(() => ProfileScreen());
                       },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Row(
-                            children: const [
-                              Icon(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 5, vertical: 20),
+                        child: ListTile(
+                          title: Text(
+                            '${loginController.currentUser?.displayName}',
+                            style: AppStyle.txtPoppinsMedium20,
+                          ),
+                          subtitle: Text('${loginController.currentUser?.email}',
+                            style: AppStyle.txtPoppinsSemiBold16,
+                          ),
+                          leading: Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: Colors.blue,
+                                width: 2.0,
+                              ),
+                            ),
+                            child: CircleAvatar(
+                              backgroundColor: Colors.grey.shade400,
+                              radius: 25,
+                              child: const Icon(
                                 Icons.person,
-                                size: 26,
+                                size: 40,
                               ),
-                              SizedBox(
-                                width: 30,
-                              ),
-                              Text(
-                                'Login',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
+                            ),
                           ),
-                          const Icon(
+                          trailing: const Icon(
                             Icons.arrow_forward_ios,
-                            size: 20,
-                          ),
-                        ],
+                            color: Colors.black,
+                            size: 20,),
+                        ),
                       ),
+                    )
+                  else
+                    Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 30.0, vertical: 10.0),
+                          child: InkWell(
+                            onTap: () {
+                              if (loginController.currentUser?.id == null) {
+                                debugPrint(
+                                    "User :${loginController.currentUser?.displayName}: not logged in...");
+                                Get.to(() => const LoginPage(
+                                      loginRoute: LoginRoute.settingsScreen,
+                                    ));
+                              } else {
+                                debugPrint(
+                                    "User :${loginController.currentUser?.displayName}: already logged in...");
+                              }
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Row(
+                                  children: const [
+                                    Icon(
+                                      Icons.person,
+                                      size: 26,
+                                    ),
+                                    SizedBox(
+                                      width: 30,
+                                    ),
+                                    Text(
+                                      'Login',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const Icon(
+                                  Icons.arrow_forward_ios,
+                                  size: 20,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.only(left: 80.0, right: 10),
+                          child: Divider(
+                            thickness: 2,
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                  // general Settings Text
+
+                  // Login Button
+
+                  /*// general Settings Text
                   const Padding(
                     padding:
                         EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
@@ -165,7 +217,7 @@ class _SettingScreenState extends State<SettingScreen> {
                         ),
                       ),
                     ),
-                  ),
+                  ),*/
                   // WishList Button
                   Padding(
                     padding: const EdgeInsets.symmetric(
@@ -199,14 +251,16 @@ class _SettingScreenState extends State<SettingScreen> {
                           Row(
                             children: [
                               Text(
-                                wishListController.favouritesList.value.isNotEmpty
+                                wishListController
+                                        .favouritesList.value.isNotEmpty
                                     ? wishListController.itemsCount == 1
                                         ? '${wishListController.itemsCount} Product'
                                         : '${wishListController.itemsCount} Products'
                                     : '',
                                 style: TextStyle(
                                   fontSize: 15,
-                                  color: wishListController.favouritesList.value.isNotEmpty
+                                  color: wishListController
+                                          .favouritesList.value.isNotEmpty
                                       ? Colors.green
                                       : Colors.black,
                                 ),
@@ -224,7 +278,7 @@ class _SettingScreenState extends State<SettingScreen> {
                       ),
                     ),
                   ),
-                  // Divider
+                  /*// Divider
                   const Padding(
                     padding: EdgeInsets.only(left: 80.0, right: 10),
                     child: Divider(
@@ -455,7 +509,7 @@ class _SettingScreenState extends State<SettingScreen> {
                         ],
                       ),
                     ),
-                  ),
+                  ),*/
                   // Divider
                   const Padding(
                     padding: EdgeInsets.only(left: 80.0, right: 10),

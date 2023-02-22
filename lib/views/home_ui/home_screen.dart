@@ -11,7 +11,6 @@ import 'package:lime_light_copy_shopify_store/shopify_models/models/models.dart'
 import 'package:lime_light_copy_shopify_store/views/categories/collections_details_screen.dart';
 import 'package:lime_light_copy_shopify_store/views/products_details/all_products_screen.dart';
 import 'package:lime_light_copy_shopify_store/views/cart/new_add_to_cart_screen.dart';
-import 'package:lime_light_copy_shopify_store/views/products_details/product_details_screen.dart';
 import 'package:lime_light_copy_shopify_store/widgets/exit_popup.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -29,8 +28,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _navigateToProductDetailScreen(Product product) {
     Fluttertoast.showToast(msg: 'Routing to ${product.title}');
-    debugPrint("${product.id}");
-    Get.to(() => ProductDetailScreen(product: product));
+    debugPrint(product.id);
+    Get.to(() => NewAddToCartScreen(product: product));
   }
 
   void _navigateToAllProductsScreen() {
@@ -165,8 +164,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   child: GestureDetector(
                                     onTap: () {
                                       _navigateToCollectionDetailScreen(
-                                          controller.collections[0].id,
-                                          controller.collections[0].title);
+                                          controller.collections.first.id,
+                                          controller.collections.first.title);
                                     },
                                     child: SizedBox(
                                       width: size.width * 0.9,
@@ -180,7 +179,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       //   height: 180,
                                       // ),
                                       CachedNetworkImage(
-                                        imageUrl: controller.collections[0].image?.originalSrc ?? '',
+                                        imageUrl: controller.collections.first.image?.originalSrc ?? '',
                                         placeholder: (context, url) => Image.asset(
                                             'assets/images/lime-light-logo.png',
                                             fit: BoxFit.cover),

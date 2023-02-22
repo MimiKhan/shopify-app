@@ -8,11 +8,18 @@ import 'package:lime_light_copy_shopify_store/controllers/login_controller.dart'
 import 'package:lime_light_copy_shopify_store/views/checkout/pre_checkout_screen.dart';
 import 'package:lime_light_copy_shopify_store/views/login/components/my_button.dart';
 import 'package:lime_light_copy_shopify_store/views/login/components/my_textfield.dart';
+import 'package:lime_light_copy_shopify_store/views/main_ui/main_screen.dart';
+
+enum LoginRoute {
+  cartScreen,
+  settingsScreen
+}
+
 
 class LoginPage extends StatefulWidget {
-  String? previousPage;
+  final LoginRoute loginRoute;
 
-  LoginPage({super.key, required String previousPage});
+  const LoginPage({super.key, required this.loginRoute});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -22,19 +29,16 @@ class _LoginPageState extends State<LoginPage> {
   final loginController = Get.find<LoginController>();
   final cartController = Get.find<CartController>();
 
-  String? previousScreen;
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    previousScreen = widget.previousPage;
   }
 
   // text editing controllers
-  final emailController = TextEditingController();
+  final emailController = TextEditingController(text: 'mimimurdana@gmail.com');
 
-  final passwordController = TextEditingController();
+  final passwordController = TextEditingController(text: 'Murdana007');
 
   // sign user in method
   signUserIn() async {
@@ -56,13 +60,14 @@ class _LoginPageState extends State<LoginPage> {
     // try sign in
     try {
 
-      await loginController.signInWithEmailPass(email: email, password: password).whenComplete(() {
-        Fluttertoast.showToast(msg: "User signed in as : ${loginController.currentUser.email}");
-        debugPrint("User signed in as : ${loginController.currentUser.email}");
-        if(previousScreen == "cartScreen"){
+      await loginController.signInWithEmailPass(email: email, password: password).then((value) {
+        Fluttertoast.showToast(msg: "User signed in as : ${loginController.currentUser!.email}");
+        debugPrint("User signed in as : ${loginController.currentUser!.email}");
+        if(widget.loginRoute == LoginRoute.cartScreen){
           Get.to(()=>PreCheckoutScreen(cartModelItems: cartController.cartModelItems));
-        }else{
-          Get.back();
+        }else if(widget.loginRoute == LoginRoute.settingsScreen){
+          Fluttertoast.showToast(msg: "Routing to Settings");
+          Get.to(() => MainScreen(selectedIndex: 4));
         }
       });
 
@@ -167,36 +172,6 @@ class _LoginPageState extends State<LoginPage> {
 
                 const SizedBox(height: 50),
 
-                // or continue with
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Divider(
-                          thickness: 0.5,
-                          color: Colors.grey[400],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                        child: Text(
-                          'Or continue with',
-                          style: TextStyle(color: Colors.grey[700]),
-                        ),
-                      ),
-                      Expanded(
-                        child: Divider(
-                          thickness: 0.5,
-                          color: Colors.grey[400],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
-                const SizedBox(height: 50),
-
                 // google + apple sign in buttons
                 // Row(
                 //   mainAxisAlignment: MainAxisAlignment.center,
@@ -238,7 +213,9 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     const SizedBox(width: 4),
                     GestureDetector(
-                      onTap: (){},
+                      onTap: (){
+                        Get.toNamed('/registerScreen');
+                      },
                       child: const Text(
                         'Register now',
                         style: TextStyle(

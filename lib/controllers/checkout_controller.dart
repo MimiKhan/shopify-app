@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:flutter_braintree/flutter_braintree.dart';
 import 'package:lime_light_copy_shopify_store/shopify_models/enums/src/payment_token_type.dart';
 import 'package:lime_light_copy_shopify_store/shopify_models/flutter_simple_shopify.dart';
 import 'package:lime_light_copy_shopify_store/shopify_models/models/src/product/price_v_2/price_v_2.dart';
@@ -78,17 +77,18 @@ class CheckoutController extends GetxController {
     required String currencyCode,
   }) async {
     var shopifyCheckout = ShopifyCheckout.instance;
-    var data =
-        await shopifyCheckout.checkoutCompleteWithTokenizedPaymentV3(checkoutId,
-            checkout: checkout,
-            token: token,
-            paymentTokenType: PaymentTokenType.GOOGLE_PAY,
-            idempotencyKey: idempotencyKey,
-            amount: amount,
-            currencyCode: currencyCode);
+    var data = await shopifyCheckout.checkoutCompleteWithTokenizedPaymentV3(
+        checkoutId,
+        checkout: checkout,
+        token: token,
+        paymentTokenType: PaymentTokenType.GOOGLE_PAY,
+        idempotencyKey: idempotencyKey,
+        amount: amount,
+        currencyCode: currencyCode);
     paymentDataGP.value = data.toString();
     update();
   }
+
   Future<void> payWithApplePay({
     required String checkoutId,
     required String idempotencyKey,
@@ -97,14 +97,14 @@ class CheckoutController extends GetxController {
     required String currencyCode,
   }) async {
     var shopifyCheckout = ShopifyCheckout.instance;
-    var data =
-        await shopifyCheckout.checkoutCompleteWithTokenizedPaymentV3(checkoutId,
-            checkout: checkout,
-            token: token,
-            paymentTokenType: PaymentTokenType.APPLE_PAY,
-            idempotencyKey: idempotencyKey,
-            amount: amount,
-            currencyCode: currencyCode);
+    var data = await shopifyCheckout.checkoutCompleteWithTokenizedPaymentV3(
+        checkoutId,
+        checkout: checkout,
+        token: token,
+        paymentTokenType: PaymentTokenType.APPLE_PAY,
+        idempotencyKey: idempotencyKey,
+        amount: amount,
+        currencyCode: currencyCode);
     paymentDataGP.value = data.toString();
     update();
   }

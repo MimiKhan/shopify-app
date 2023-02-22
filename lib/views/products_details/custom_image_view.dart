@@ -38,6 +38,9 @@ class _CustomImageViewerState extends State<CustomImageViewer> {
           Expanded(
             child: PageView.builder(
               controller: _pageController,
+              scrollDirection: Axis.horizontal,
+              physics: const AlwaysScrollableScrollPhysics(),
+
               itemCount: widget.product!.images.length,
               itemBuilder: (context, index) {
                 return PhotoView(

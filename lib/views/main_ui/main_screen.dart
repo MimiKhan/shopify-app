@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:badges/badges.dart' as badges;
 import 'package:get/get.dart';
 import 'package:lime_light_copy_shopify_store/controllers/cart_controller.dart';
-import 'package:lime_light_copy_shopify_store/controllers/check_internet_controller.dart';
 import 'package:lime_light_copy_shopify_store/services/hex_color.dart';
-import 'package:lime_light_copy_shopify_store/services/network_info.dart';
 import 'package:lime_light_copy_shopify_store/views/cart/cart_screen.dart';
 import 'package:lime_light_copy_shopify_store/views/cart/cart_screen2.0.dart';
 import 'package:lime_light_copy_shopify_store/views/categories/collections_screen.dart';
@@ -37,7 +35,6 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   late CurvedAnimation borderRadiusCurve;
 
   final cartController = Get.find<CartController>();
-  final internetController = Get.find<InternetCheckController>();
 
   var pagesList = [
     HomeScreen(),
@@ -155,17 +152,12 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () => showExitPopup(context),
-      child: Obx(() {
-        if (internetController.isOnline) {
-          return Scaffold(
+      child: Scaffold(
               extendBody: true,
               resizeToAvoidBottomInset: true,
               bottomNavigationBar: buildNavigationBar(),
-              body: pagesList[widget.selectedIndex]);
-        } else {
-          return internetController.getErrorWidget();
-        }
-      }),
+              body: pagesList[widget.selectedIndex])
+
     );
   }
 
@@ -209,34 +201,35 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
                       badgeContent: GetX<CartController>(builder: (controller) {
                         return Text(
                           controller.cartModelItemsCount.toString(),
+                          style: const TextStyle(color: Colors.white),
                         );
                       }),
                       showBadge: true,
                       ignorePointer: true,
                       badgeStyle: badges.BadgeStyle(
                         shape: badges.BadgeShape.circle,
-                        badgeColor: Colors.blue,
+                        badgeColor: Colors.black,
                         padding: const EdgeInsets.all(5),
                         borderRadius: BorderRadius.circular(4),
                         borderSide:
                             const BorderSide(color: Colors.white, width: 2),
-                        badgeGradient: const badges.BadgeGradient.linear(
-                          colors: [Colors.blue, Colors.yellow],
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                        ),
+                        // badgeGradient: const badges.BadgeGradient.linear(
+                        //   colors: [Colors.blue, Colors.yellow],
+                        //   begin: Alignment.topCenter,
+                        //   end: Alignment.bottomCenter,
+                        // ),
                         elevation: 0,
                       ),
-                      badgeAnimation: const badges.BadgeAnimation.fade(
-                        animationDuration: Duration(seconds: 3),
-                        toAnimate: true,
-                        // colorChangeAnimationDuration: Duration(seconds: 2),
-                        disappearanceFadeAnimationDuration:
-                            Duration(seconds: 1),
-                        loopAnimation: true,
-                        curve: Curves.elasticInOut,
-                        // colorChangeAnimationCurve: Curves.easeInCubic,
-                      ),
+                      // badgeAnimation: const badges.BadgeAnimation.fade(
+                      //   animationDuration: Duration(seconds: 3),
+                      //   toAnimate: true,
+                      //   // colorChangeAnimationDuration: Duration(seconds: 2),
+                      //   disappearanceFadeAnimationDuration:
+                      //       Duration(seconds: 1),
+                      //   loopAnimation: true,
+                      //   curve: Curves.elasticInOut,
+                      //   // colorChangeAnimationCurve: Curves.easeInCubic,
+                      // ),
                     ),
                   ],
                 ))

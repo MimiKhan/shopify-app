@@ -77,14 +77,13 @@ class _RegisterPageState extends State<RegisterPage> {
                 firstName: firstName,
                 lastName: lastName,
                 email: email,
-                password: password)
-            .whenComplete(() {
-          showDoneDialog();
-        });
+                password: password).then((value) {
+                  showDoneDialog();
+                });
 
-        debugPrint("Access token : ${loginController.userAccessToken.value} :");
+        debugPrint("Access token : ${loginController.userAccessToken} :");
       }
-      Get.back();
+      Navigator.pop(context);
     } on Exception catch (e) {
       // pop the loading circle
       Get.back();

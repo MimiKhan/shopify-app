@@ -3,7 +3,6 @@ import 'dart:io';
 import 'dart:isolate';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lime_light_copy_shopify_store/views/no_internet_screen.dart';
 
 ///[checkInternet] is used to fetch data from second isolate and send to main isolate.
 bool checkInternet = true;

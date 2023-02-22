@@ -104,6 +104,7 @@ flutter:
   assets:
     - assets/images/
     - assets/json/
+    - assets/fonts/
   # assets:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
@@ -119,6 +120,32 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
+  fonts:
+    - family: Lato
+      fonts:
+        - asset: assets/fonts/LatoRegular.ttf
+          weight: 400
+        - asset: assets/fonts/LatoBold.ttf
+          weight: 700
+    - family: Montserrat
+      fonts:
+        - asset: assets/fonts/MontserratSemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/MontserratMedium.ttf
+          weight: 500
+        - asset: assets/fonts/MontserratRegular.ttf
+          weight: 400
+    - family: Playfair Display
+      fonts:
+        - asset: assets/fonts/PlayfairDisplayMedium.ttf
+          weight: 500
+        - asset: assets/fonts/PlayfairDisplayRegular.ttf
+          weight: 400
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/InterRegular.ttf
+          weight: 400
+
   # fonts:
   #   - family: Schyler
   #     fonts:

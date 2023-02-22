@@ -12,16 +12,16 @@ import 'package:lime_light_copy_shopify_store/controllers/wish_list_controller.d
 import 'package:lime_light_copy_shopify_store/shopify_models/models/src/product/product.dart';
 import 'package:lime_light_copy_shopify_store/shopify_models/models/src/product/product_variant/product_variant.dart';
 import 'package:lime_light_copy_shopify_store/views/cart/cart_model.dart';
+import 'package:lime_light_copy_shopify_store/views/products_details/new_product_details_screen.dart';
+import 'package:lime_light_copy_shopify_store/views/products_details/product_details_screen.dart';
 
 class NewAddToCartScreen extends StatefulWidget {
   final Product product;
 
-  const NewAddToCartScreen({Key? key, required this.product})
-      : super(key: key);
+  const NewAddToCartScreen({Key? key, required this.product}) : super(key: key);
 
   @override
-  State<NewAddToCartScreen> createState() =>
-      _NewAddToCartScreenState();
+  State<NewAddToCartScreen> createState() => _NewAddToCartScreenState();
 }
 
 class _NewAddToCartScreenState extends State<NewAddToCartScreen> {
@@ -73,11 +73,10 @@ class _NewAddToCartScreenState extends State<NewAddToCartScreen> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Container(
-              color: Colors.grey,
               height: size.height,
               width: size.width,
               child: Stack(
-                alignment: Alignment.topCenter,
+                fit: StackFit.loose,
                 children: [
                   Container(
                     width: size.width,
@@ -102,12 +101,11 @@ class _NewAddToCartScreenState extends State<NewAddToCartScreen> {
                   Align(
                     alignment: Alignment.bottomCenter,
                     child: Container(
-                      height: size.height * 0.54,
+                      height: size.height * 0.5,
                       decoration: const BoxDecoration(
-                        color: Colors.grey,
                         borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(25),
-                            topLeft: Radius.circular(25)),
+                            topRight: Radius.circular(30),
+                            topLeft: Radius.circular(30)),
                       ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -116,41 +114,57 @@ class _NewAddToCartScreenState extends State<NewAddToCartScreen> {
                           const SizedBox(
                             height: 10,
                           ),
+                          Flexible(
+                            flex: 2,
+                            fit: FlexFit.loose,
+                            child: Text(
+                              product.title,
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14),
+                              softWrap: true,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
                           Padding(
                             padding:
-                                const EdgeInsets.symmetric(horizontal: 10.0),
+                                const EdgeInsets.symmetric(horizontal: 15.0),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(
-                                  product.title,
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 15),
-                                  softWrap: true,
+                                const Text(
+                                  'Order Status',
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w400),
                                 ),
-                                IconButton(
-                                  onPressed: () {},
-                                  icon: const Icon(
-                                    CupertinoIcons.share,
-                                    color: Colors.black,
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    foregroundColor: Colors.white,
+                                    backgroundColor: Colors.black,
+                                    // foreground color
+                                    minimumSize: const Size(150, 50),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12.0),
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    Get.to(() =>
+                                        NewProductDetailsScreen(product: product));
+                                  },
+                                  child: const Text(
+                                    'Details',
+                                    style: TextStyle(fontSize: 18),
                                   ),
                                 ),
                               ],
                             ),
                           ),
-                          const Padding(
-                            padding: EdgeInsets.only(left: 15.0),
-                            child: Text(
-                              'Order Status',
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w400),
-                            ),
-                          ),
                           const SizedBox(
-                            height: 10,
+                            height: 20,
                           ),
                           !_optionsAvailable
                               ? Padding(
@@ -334,47 +348,79 @@ class _NewAddToCartScreenState extends State<NewAddToCartScreen> {
                               ],
                             ),
                           ),
+                          const SizedBox(
+                            height: 25,
+                          ),
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 20.0),
+                            child: Align(
+                              alignment: Alignment.bottomCenter,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Row(
+                                    children: [
+                                      GetX<SettingsController>(
+                                          builder: (controller) {
+                                        return Icon(controller
+                                            .selectedCurrencyIcon.value);
+                                      }),
+                                      Text(
+                                        _productVariant.price.amount
+                                            .toStringAsFixed(2),
+                                        style: const TextStyle(
+                                            fontSize: 28,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
                           Align(
                             alignment: Alignment.bottomCenter,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Row(
-                                  children: [
-                                    GetX<SettingsController>(
-                                      builder: (controller) {
-                                        return Icon(controller.selectedCurrencyIcon.value);
-                                      }
-                                    ),
-                                    Text(
-                                      _productVariant.price.amount
-                                          .toStringAsFixed(2),
-                                      style: const TextStyle(
-                                          fontSize: 22,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ],
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                foregroundColor: Colors.white,
+                                backgroundColor: Colors.black,
+                                // foreground color
+                                minimumSize: const Size(300, 50),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12.0),
                                 ),
-                                ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    foregroundColor: Colors.white, backgroundColor: Colors.black,
-                                    // foreground color
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(18.0),
-                                    ),
-                                  ),
-                                  onPressed: () {
-                                    cartController.addItem(CartModel(productVariant: _productVariant, product: product, quantity: _quantity));
-                                    Fluttertoast.showToast(msg: '${product.title} added to cart. Cart : ${cartController.cartModelItemsCount}');
-                                    Get.toNamed('/mainScreen');
-                                  },
-                                  child: const Text('Add to Cart'),
-                                ),
-                              ],
+                              ),
+                              onPressed: () {
+                                cartController.addItem(CartModel(
+                                    productVariant: _productVariant,
+                                    product: product,
+                                    quantity: _quantity));
+                                Fluttertoast.showToast(
+                                    msg:
+                                        '${product.title} added to cart. Cart : ${cartController.cartModelItemsCount}');
+                                Get.toNamed('/mainScreen');
+                              },
+                              child: const Text('Add to Cart'),
                             ),
                           ),
                         ],
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    top: 50,
+                    right: 15,
+                    child: IconButton(
+                      onPressed: () {},
+                      icon: const Icon(
+                        CupertinoIcons.share,
+                        color: Colors.black,
                       ),
                     ),
                   ),

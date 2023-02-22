@@ -10,7 +10,6 @@ import 'package:html2md/html2md.dart' as html2md;
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:lime_light_copy_shopify_store/views/products_details/custom_image_view.dart';
 import 'package:lime_light_copy_shopify_store/views/cart/new_add_to_cart_screen.dart';
-import 'package:lime_light_copy_shopify_store/widgets/custom_image_view.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   final Product product;
@@ -176,7 +175,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                 },
               ),
             ],
-            flexibleSpace: Container(
+            flexibleSpace: SizedBox(
               width: size.width,
               child: ListView.builder(
                 itemCount: product.images.length,
@@ -236,22 +235,18 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                   endIndent: 40,
                 ),
                 // Title Widget
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
                     child: SizedBox(
-                      width: 200,
-                      child: Flexible(
-                        flex: 2,
-                        fit: FlexFit.loose,
-                        child: Text(
-                          product.title,
-                          softWrap: true,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
+                      width: 250,
+                      child: Text(
+                        product.title,
+                        softWrap: true,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
@@ -394,7 +389,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                             shrinkWrap: true,
                             itemCount: product.option.length,
                             scrollDirection: Axis.vertical,
-                            itemExtent: 40,
+                            // itemExtent: 50,
                             physics: const NeverScrollableScrollPhysics(),
                             itemBuilder: (_, int optionsListViewIndex) {
                               return Row(
@@ -412,17 +407,20 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                                       ),
                                     ),
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 20.0),
-                                    child: Text(
-                                      product
-                                          .option[optionsListViewIndex].values
-                                          .join(','),
-                                      style: const TextStyle(
-                                        fontSize: 17,
+                                  SizedBox(
+                                    width:200,
+                                    child: Flexible(
+                                      fit:FlexFit.loose,
+                                      flex:2,
+                                      child: Text(
+                                        product
+                                            .option[optionsListViewIndex].values
+                                            .join(' , '),
+                                        style: const TextStyle(
+                                          fontSize: 17,
+                                        ),
+                                        softWrap: true,
                                       ),
-                                      softWrap: true,
                                     ),
                                   ),
                                 ],

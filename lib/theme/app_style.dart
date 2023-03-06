@@ -1,9 +1,170 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lime_light_copy_shopify_store/core/utils/color_constant.dart';
 import 'package:lime_light_copy_shopify_store/core/utils/size_utils.dart';
 
 class AppStyle {
-  static TextStyle txtPoppinsMedium14 = TextStyle(
+  /// Google fonts
+
+  // Open Sans
+  static TextStyle gfOpenSansRegularWhite({required double fontSize}) {
+    return GoogleFonts.openSans(
+        fontSize: fontSize, color: Colors.white, fontWeight: FontWeight.w400);
+  }
+
+  static TextStyle gfOpenSansMediumWhite({required double fontSize}) {
+    return GoogleFonts.openSans(
+        fontSize: fontSize, color: Colors.white, fontWeight: FontWeight.w700);
+  }
+
+  static TextStyle gfOpenSansBoldWhite({required double fontSize}) {
+    return GoogleFonts.openSans(
+        fontSize: fontSize, color: Colors.white, fontWeight: FontWeight.bold);
+  }
+
+  static TextStyle gfOpenSansRegularBlack({required double fontSize}) {
+    return GoogleFonts.openSans(
+        fontSize: fontSize, color: Colors.black, fontWeight: FontWeight.w400);
+  }
+
+  static TextStyle gfOpenSansMediumBlack({required double fontSize}) {
+    return GoogleFonts.openSans(
+        fontSize: fontSize, color: Colors.black, fontWeight: FontWeight.w700);
+  }
+
+  static TextStyle gfOpenSansBoldBlack({required double fontSize}) {
+    return GoogleFonts.openSans(
+        fontSize: fontSize, color: Colors.black, fontWeight: FontWeight.bold);
+  }
+
+  // Josefin Sans
+  static TextStyle gfJosefinRegularWhite({required double fontSize}) {
+    return GoogleFonts.josefinSans(
+        fontSize: fontSize, color: Colors.white, fontWeight: FontWeight.w400);
+  }
+
+  static TextStyle gfJosefinMediumWhite({required double fontSize}) {
+    return GoogleFonts.josefinSans(
+        fontSize: fontSize, color: Colors.white, fontWeight: FontWeight.w700);
+  }
+
+  static TextStyle gfJosefinBoldWhite({required double fontSize}) {
+    return GoogleFonts.josefinSans(
+        fontSize: fontSize, color: Colors.white, fontWeight: FontWeight.bold);
+  }
+
+  static TextStyle gfJosefinRegularBlack({required double fontSize}) {
+    return GoogleFonts.josefinSans(
+        fontSize: fontSize, color: Colors.black, fontWeight: FontWeight.w400);
+  }
+
+  static TextStyle gfJosefinMediumBlack({required double fontSize}) {
+    return GoogleFonts.josefinSans(
+        fontSize: fontSize, color: Colors.black, fontWeight: FontWeight.w700);
+  }
+
+  static TextStyle gfJosefinBoldBlack({required double fontSize}) {
+    return GoogleFonts.josefinSans(
+        fontSize: fontSize, color: Colors.black, fontWeight: FontWeight.bold);
+  }
+
+  // Dosis
+  static TextStyle gfDosisRegularWhite({required double fontSize}) {
+    return GoogleFonts.dosis(
+        fontSize: fontSize, color: Colors.white, fontWeight: FontWeight.w400);
+  }
+
+  static TextStyle gfDosisMediumWhite({required double fontSize}) {
+    return GoogleFonts.dosis(
+        fontSize: fontSize, color: Colors.white, fontWeight: FontWeight.w700);
+  }
+
+  static TextStyle gfDosisBoldWhite({required double fontSize}) {
+    return GoogleFonts.dosis(
+        fontSize: fontSize, color: Colors.white, fontWeight: FontWeight.bold);
+  }
+
+  static TextStyle gfDosisRegularBlack({required double fontSize}) {
+    return GoogleFonts.dosis(
+        fontSize: fontSize, color: Colors.black, fontWeight: FontWeight.w400);
+  }
+
+  static TextStyle gfDosisMediumBlack({required double fontSize}) {
+    return GoogleFonts.dosis(
+        fontSize: fontSize, color: Colors.black, fontWeight: FontWeight.w700);
+  }
+
+  static TextStyle gfDosisBoldBlack({required double fontSize}) {
+    return GoogleFonts.dosis(
+        fontSize: fontSize, color: Colors.black, fontWeight: FontWeight.bold);
+  }
+
+  // Righteous for Heavy Bold Designs
+
+  static TextStyle gfRighteousRegularWhite({required double fontSize}) {
+    return GoogleFonts.righteous(
+        fontSize: fontSize, color: Colors.white, fontWeight: FontWeight.w400);
+  }
+
+  static TextStyle gfRighteousMediumWhite({required double fontSize}) {
+    return GoogleFonts.righteous(
+        fontSize: fontSize, color: Colors.white, fontWeight: FontWeight.w700);
+  }
+
+  static TextStyle gfRighteousBoldWhite({required double fontSize}) {
+    return GoogleFonts.righteous(
+        fontSize: fontSize, color: Colors.white, fontWeight: FontWeight.bold);
+  }
+
+  static TextStyle gfRighteousRegularBlack({required double fontSize}) {
+    return GoogleFonts.righteous(
+        fontSize: fontSize, color: Colors.black, fontWeight: FontWeight.w400);
+  }
+
+  static TextStyle gfRighteousMediumBlack({required double fontSize}) {
+    return GoogleFonts.righteous(
+        fontSize: fontSize, color: Colors.black, fontWeight: FontWeight.w700);
+  }
+
+  static TextStyle gfRighteousBoldBlack({required double fontSize}) {
+    return GoogleFonts.righteous(
+        fontSize: fontSize, color: Colors.black, fontWeight: FontWeight.bold);
+  }
+
+  // ABeeZee
+
+  static TextStyle gfABeeZeeRegularWhite({required double fontSize}) {
+    return GoogleFonts.aBeeZee(
+        fontSize: fontSize, color: Colors.white, fontWeight: FontWeight.w400);
+  }
+
+  static TextStyle gfABeeZeeMediumWhite({required double fontSize}) {
+    return GoogleFonts.aBeeZee(
+        fontSize: fontSize, color: Colors.white, fontWeight: FontWeight.w700);
+  }
+
+  static TextStyle gfABeeZeeBoldWhite({required double fontSize}) {
+    return GoogleFonts.aBeeZee(
+        fontSize: fontSize, color: Colors.white, fontWeight: FontWeight.bold);
+  }
+
+  static TextStyle gfABeeZeeRegularBlack({required double fontSize}) {
+    return GoogleFonts.aBeeZee(
+        fontSize: fontSize, color: Colors.black, fontWeight: FontWeight.w400);
+  }
+
+  static TextStyle gfABeeZeeMediumBlack({required double fontSize}) {
+    return GoogleFonts.aBeeZee(
+        fontSize: fontSize, color: Colors.black, fontWeight: FontWeight.w700);
+  }
+
+  static TextStyle gfABeeZeeBoldBlack({required double fontSize}) {
+    return GoogleFonts.aBeeZee(
+        fontSize: fontSize, color: Colors.black, fontWeight: FontWeight.bold);
+  }
+
+  /// Asset Fonts
+  /*static TextStyle txtPoppinsMedium14 = TextStyle(
     color: ColorConstant.orange700,
     fontSize: getFontSize(
       14,
@@ -60,6 +221,14 @@ class AppStyle {
     color: ColorConstant.whiteA700,
     fontSize: getFontSize(
       15,
+    ),
+    fontFamily: 'Poppins',
+    fontWeight: FontWeight.w500,
+  );
+  static TextStyle txtPoppinsMedium19 = TextStyle(
+    color: ColorConstant.whiteA700,
+    fontSize: getFontSize(
+      19,
     ),
     fontFamily: 'Poppins',
     fontWeight: FontWeight.w500,
@@ -143,6 +312,7 @@ class AppStyle {
     fontFamily: 'Montserrat',
     fontWeight: FontWeight.w500,
   );
+
   static TextStyle txtMontserratMedium18 = TextStyle(
     color: ColorConstant.gray5001,
     fontSize: getFontSize(
@@ -150,6 +320,15 @@ class AppStyle {
     ),
     fontFamily: 'Montserrat',
     fontWeight: FontWeight.w500,
+  );
+
+  static TextStyle txtMontserratBold18 = TextStyle(
+    color: ColorConstant.gray5001,
+    fontSize: getFontSize(
+      18,
+    ),
+    fontFamily: 'Montserrat',
+    fontWeight: FontWeight.bold,
   );
 
   static TextStyle txtLatoRegular13Gray900 = TextStyle(
@@ -347,6 +526,5 @@ class AppStyle {
     ),
     fontFamily: 'Lato',
     fontWeight: FontWeight.w400,
-  );
-
+  );*/
 }

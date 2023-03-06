@@ -36,7 +36,7 @@ class _ProfileMyOrdersScreenState extends State<ProfileMyOrdersScreen> {
           children: [
             Text(
               'Orders',
-              style: AppStyle.txtLatoBold24,
+              style: AppStyle.gfABeeZeeBoldBlack(fontSize: 24),
             ),
             customerController.ordersList.isEmpty?
             Center(

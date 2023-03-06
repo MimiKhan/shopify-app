@@ -12,7 +12,7 @@ _$_ProductVariantCheckout _$$_ProductVariantCheckoutFromJson(
       priceV2: PriceV2.fromJson(json['priceV2'] as Map<String, dynamic>),
       title: json['title'] as String,
       availableForSale: json['availableForSale'] as bool,
-      sku: '',
+      sku: json['sku'] as String,
       requiresShipping: json['requiresShipping'] as bool,
       id: json['id'] as String,
       image: json['image'] == null

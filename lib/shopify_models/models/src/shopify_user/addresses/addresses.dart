@@ -4,7 +4,7 @@ import 'package:lime_light_copy_shopify_store/shopify_models/models/src/shopify_
 part 'addresses.freezed.dart';
 part 'addresses.g.dart';
 
-@freezed
+@Freezed(makeCollectionsUnmodifiable: false)
 class Addresses with _$Addresses {
   const Addresses._();
   factory Addresses({required List<Address> addressList}) = _Addresses;

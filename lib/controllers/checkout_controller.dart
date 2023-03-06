@@ -23,8 +23,9 @@ class CheckoutController extends GetxController {
       var checkout = await shopifyCheckout.createCheckout(
           lineItems: lineItems, mailingAddress: mailingAddress);
       this.checkout = checkout;
-      debugPrint(
-          '${checkout.shippingLine?.handle ?? 'No Handle'},${checkout.shippingLine},${checkout.shippingAddress}');
+      debugPrint('${checkout}');
+      // debugPrint(
+      //     '${checkout.shippingLine?.handle ?? 'No Handle'},${checkout.shippingLine}, ${checkout.availableShippingRates?.shippingRates.toString() ?? ''},${checkout.shippingAddress}');
       update();
     } catch (e) {
       debugPrint(e.toString());

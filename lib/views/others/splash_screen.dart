@@ -53,7 +53,7 @@ class _SplashScreenState extends State<SplashScreen>
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: HexColor("#3490dc"),
+      backgroundColor: HexColor("#FFFFFF"),
       body: Center(
         child: LottieBuilder.asset(
           'assets/json/small-shopify-animation.json',

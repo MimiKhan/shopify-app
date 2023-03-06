@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lime_light_copy_shopify_store/controllers/login_controller.dart';
 import 'package:lime_light_copy_shopify_store/core/utils/color_constant.dart';
+import 'package:lime_light_copy_shopify_store/views/main_ui/main_screen.dart';
 import 'package:lime_light_copy_shopify_store/views/profile/profile_address_details_screen.dart';
 import 'package:lime_light_copy_shopify_store/views/profile/profile_info_screen.dart';
 import 'package:lime_light_copy_shopify_store/views/profile/profile_my_orders_screen.dart';
@@ -17,11 +18,19 @@ class _ProfileScreenState extends State<ProfileScreen> with TickerProviderStateM
   final loginController = Get.find<LoginController>();
   
   late TabController controller;
+
+  Future<void> refreshData()async{
+    await Future.delayed(const Duration(seconds: 3), () {
+      loginController.currentUser.value = null;
+      updateUser();
+    });
+  }
   
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    debugPrint("user AT *: ${loginController.userAccessToken.value}");
     controller = TabController(length: 3, vsync: this);
   }
 
@@ -46,105 +55,121 @@ class _ProfileScreenState extends State<ProfileScreen> with TickerProviderStateM
           backgroundColor: Colors.black,
           actions: [
             IconButton(onPressed: ()async{
-              await loginController.signout().whenComplete(() {
-                Future.delayed(const Duration(seconds: 1));
-                Get.toNamed('/mainScreen');
+              debugPrint(
+                  ': User : ${loginController.currentUser.value?.firstName ?? ''} :');
+              await loginController.signout().then((value) {
+                debugPrint(
+                    'Log out successful : Access token : ${loginController.userAccessToken.value} : ');
+                Get.to(()=> MainScreen(selectedIndex: 4));
               }).onError((error, stackTrace) {
+                debugPrintStack(stackTrace: stackTrace);
                 showErrorMessage(error.toString());
               });
+
             }, icon: const Icon(Icons.logout_outlined))
           ],
         ),
-        body: SingleChildScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          scrollDirection: Axis.vertical,
-          child: Column(
-            children: [
-              Container(
-                width: size.width,
-                height: 180,
-                decoration: const BoxDecoration(),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const CircleAvatar(
-                      radius: 45,
-                      backgroundColor: Colors.black,
-                      foregroundColor: Colors.white,
-                      child: Icon(
-                        Icons.person,
-                        size: 50,
+        body: RefreshIndicator(
+          onRefresh: refreshData,
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            scrollDirection: Axis.vertical,
+            child: Column(
+              children: [
+                Container(
+                  width: size.width,
+                  height: 172,
+                  decoration: const BoxDecoration(),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const CircleAvatar(
+                        radius: 45,
+                        backgroundColor: Colors.black,
+                        foregroundColor: Colors.white,
+                        child: Icon(
+                          Icons.person,
+                          size: 50,
+                        ),
                       ),
-                    ),
-                    const SizedBox(
-                      height: 25,
-                    ),
-                    Text(
-                      '${loginController.currentUser?.displayName}',
-                      style: const TextStyle(
-                          fontSize: 24,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    if (loginController.currentUser?.address?.addressList.length == 0)
-                      const Text('No Address here')
-                    else
-                      Text(
-                          '${loginController.currentUser?.address?.addressList.first.city}, '
-                              '${loginController.currentUser?.address?.addressList.first.country}'),
-                  ],
+                      const SizedBox(
+                        height: 25,
+                      ),
+                      GetX<LoginController>(
+                        builder: (controller) {
+                          return Text(
+                            '${controller.currentUser.value?.displayName}',
+                            style: const TextStyle(
+                                fontSize: 24,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                          );
+                        }
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      if (loginController.currentUser.value?.address?.addressList.length == 0)
+                        const Text('No Address here')
+                      else
+                        GetX<LoginController>(
+                          builder: (controller) {
+                            return Text(
+                                '${controller.currentUser.value?.address?.addressList.first.city}, '
+                                    '${controller.currentUser.value?.address?.addressList.first.country}');
+                          }
+                        ),
+                    ],
+                  ),
                 ),
-              ),
-              const Divider(
-                indent: 40,
-                endIndent: 40,
-                color: Colors.black,
-                thickness: 1.2,
-              ),
+                const Divider(
+                  indent: 40,
+                  endIndent: 40,
+                  color: Colors.black,
+                  thickness: 1.2,
+                ),
 
-              Container(
-                width: size.width,
-                margin: const EdgeInsets.only(top: 18),
-                child: TabBar(
-                  controller: controller,
-                  tabs: const [
-                    Tab(
-                      text: "Profile Info",
-                    ),
-                    Tab(
-                      text: "My Orders",
-                    ),
-                    Tab(
-                      text: "Addresses",
-                    ),
-                  ],
-                  labelColor: ColorConstant.indigoA200,
-                  unselectedLabelColor: ColorConstant.gray600,
+                Container(
+                  width: size.width,
+                  margin: const EdgeInsets.only(top: 18),
+                  child: TabBar(
+                    controller: controller,
+                    tabs: const [
+                      Tab(
+                        text: "Profile Info",
+                      ),
+                      Tab(
+                        text: "My Orders",
+                      ),
+                      Tab(
+                        text: "Addresses",
+                      ),
+                    ],
+                    labelColor: ColorConstant.indigoA200,
+                    unselectedLabelColor: ColorConstant.gray600,
+                  ),
                 ),
-              ),
-              Container(
-                margin: const EdgeInsets.only(
-                  left: 16,
-                  top: 36,
-                  right: 16,
-                  bottom: 49,
+                Container(
+                  margin: const EdgeInsets.only(
+                    left: 16,
+                    top: 36,
+                    right: 16,
+                    bottom: 49,
+                  ),
+                  width: size.width,
+                  height: size.height,
+                  child: TabBarView(
+                    controller: controller,
+                    children:  [
+                      ProfileInfoScreen(),
+                      const ProfileMyOrdersScreen(),
+                      const ProfileAddressDetailScreen(),
+                    ],
+                  ),
                 ),
-                width: size.width,
-                height: 1050,
-                child: TabBarView(
-                  controller: controller,
-                  children:  [
-                    ProfileInfoScreen(),
-                    const ProfileMyOrdersScreen(),
-                    ProfileAddressDetailScreen(),
-                  ],
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -167,5 +192,9 @@ class _ProfileScreenState extends State<ProfileScreen> with TickerProviderStateM
         );
       },
     );
+  }
+
+  void updateUser() {
+    loginController.checkUser();
   }
 }

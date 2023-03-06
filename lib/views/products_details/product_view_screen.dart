@@ -73,7 +73,7 @@ class ProductViewScreen extends StatelessWidget {
                                 "Order Status",
                                 overflow: TextOverflow.ellipsis,
                                 textAlign: TextAlign.left,
-                                style: AppStyle.txtPoppinsMedium20,
+                                style: AppStyle.gfABeeZeeMediumBlack(fontSize: 20),
                               ),
                             ),
                             Padding(
@@ -97,7 +97,7 @@ class ProductViewScreen extends StatelessWidget {
                                       "S",
                                       overflow: TextOverflow.ellipsis,
                                       textAlign: TextAlign.left,
-                                      style: AppStyle.txtPoppinsRegular15,
+                                      style: AppStyle.gfABeeZeeRegularBlack(fontSize: 15),
                                     ),
                                   ),
                                   Container(
@@ -120,7 +120,7 @@ class ProductViewScreen extends StatelessWidget {
                                       "M",
                                       overflow: TextOverflow.ellipsis,
                                       textAlign: TextAlign.left,
-                                      style: AppStyle.txtPoppinsRegular15,
+                                      style: AppStyle.gfABeeZeeRegularBlack(fontSize: 15),
                                     ),
                                   ),
                                   Container(
@@ -143,7 +143,7 @@ class ProductViewScreen extends StatelessWidget {
                                       "L",
                                       overflow: TextOverflow.ellipsis,
                                       textAlign: TextAlign.left,
-                                      style: AppStyle.txtPoppinsRegular15,
+                                      style: AppStyle.gfABeeZeeRegularBlack(fontSize: 15),
                                     ),
                                   ),
                                   Container(
@@ -166,7 +166,7 @@ class ProductViewScreen extends StatelessWidget {
                                       "XL",
                                       overflow: TextOverflow.ellipsis,
                                       textAlign: TextAlign.left,
-                                      style: AppStyle.txtPoppinsMedium15,
+                                      style: AppStyle.gfABeeZeeRegularBlack(fontSize: 15),
                                     ),
                                   ),
                                   Container(
@@ -184,7 +184,7 @@ class ProductViewScreen extends StatelessWidget {
                                       "XXL",
                                       overflow: TextOverflow.ellipsis,
                                       textAlign: TextAlign.left,
-                                      style: AppStyle.txtPoppinsRegular15,
+                                      style: AppStyle.gfABeeZeeRegularBlack(fontSize: 15),
                                     ),
                                   ),
                                 ],
@@ -196,7 +196,7 @@ class ProductViewScreen extends StatelessWidget {
                                 "Color",
                                 overflow: TextOverflow.ellipsis,
                                 textAlign: TextAlign.left,
-                                style: AppStyle.txtPoppinsMedium20,
+                                style: AppStyle.gfABeeZeeMediumBlack(fontSize: 20),
                               ),
                             ),
                             Padding(
@@ -245,7 +245,7 @@ class ProductViewScreen extends StatelessWidget {
                                     "Reviews",
                                     overflow: TextOverflow.ellipsis,
                                     textAlign: TextAlign.left,
-                                    style: AppStyle.txtPoppinsMedium20,
+                                    style: AppStyle.gfABeeZeeMediumBlack(fontSize: 20),
                                   ),
                                   Padding(
                                     padding: getPadding(
@@ -256,7 +256,7 @@ class ProductViewScreen extends StatelessWidget {
                                       "See All",
                                       overflow: TextOverflow.ellipsis,
                                       textAlign: TextAlign.left,
-                                      style: AppStyle.txtPoppinsMedium14,
+                                      style: AppStyle.gfABeeZeeMediumBlack(fontSize: 14),
                                     ),
                                   ),
                                 ],
@@ -290,7 +290,7 @@ class ProductViewScreen extends StatelessWidget {
                                       "4.8(1,024 reviews)",
                                       overflow: TextOverflow.ellipsis,
                                       textAlign: TextAlign.left,
-                                      style: AppStyle.txtPoppinsSemiBold16
+                                      style: AppStyle.gfABeeZeeMediumBlack(fontSize: 16)
                                           .copyWith(
                                         letterSpacing: getHorizontalSize(
                                           1.28,
@@ -320,7 +320,7 @@ class ProductViewScreen extends StatelessWidget {
                                       "\$ 134.98",
                                       overflow: TextOverflow.ellipsis,
                                       textAlign: TextAlign.left,
-                                      style: AppStyle.txtInterRegular22,
+                                      style: AppStyle.gfABeeZeeRegularBlack(fontSize: 22),
                                     ),
                                   ),
                                   CustomButton(

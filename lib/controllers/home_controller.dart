@@ -8,6 +8,7 @@ import 'package:lime_light_copy_shopify_store/shopify_models/shopify/src/shopify
 class HomeController extends GetxController {
   var bestSellingProducts = <Product>[].obs;
   var collections = <Collection>[].obs;
+  Rx<Shop?> currentShop = Rx<Shop?>(null);
 
   int get productsCount => bestSellingProducts.length;
   int get collectionsCount => collections.length;
@@ -16,6 +17,7 @@ class HomeController extends GetxController {
   void onInit() {
     super.onInit();
     initData();
+    getShopData();
   }
 
 
@@ -33,8 +35,8 @@ class HomeController extends GetxController {
       final shopifyStore = ShopifyStore.instance;
       var bestSellingProducts = await shopifyStore.getNProducts(10,
               sortKey: SortKeyProduct.RELEVANCE);
-      debugPrint(bestSellingProducts!.first.toString());
-      this.bestSellingProducts.value = bestSellingProducts;
+      // debugPrint(bestSellingProducts!.first.toString());
+      this.bestSellingProducts.value = bestSellingProducts!;
     } catch (exception) {
       debugPrint(exception.toString());
     }
@@ -49,5 +51,11 @@ class HomeController extends GetxController {
     } catch (e) {
       debugPrint(e.toString());
     }
+  }
+
+  void getShopData() async{
+    ShopifyStore shopifyStore = ShopifyStore.instance;
+    final shopData = await shopifyStore.getShop();
+    currentShop.value = shopData;
   }
 }

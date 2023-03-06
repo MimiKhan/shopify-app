@@ -6,6 +6,9 @@ import 'package:lime_light_copy_shopify_store/shopify_models/models/src/product/
 class WishListController extends GetxController{
 
   var favouritesList = <Product>[].obs;
+
+
+
   bool get keepAlive => true;
 
   int get itemsCount => favouritesList.length;

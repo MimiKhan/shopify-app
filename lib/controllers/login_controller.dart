@@ -1,18 +1,23 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:lime_light_copy_shopify_store/shopify_models/flutter_simple_shopify.dart';
+import 'package:lime_light_copy_shopify_store/shopify_models/models/src/shopify_user/address/address.dart';
 
 class LoginController extends GetxController {
   // late ShopifyUser newUser;
-  ShopifyUser? currentUser;
+  Rx<ShopifyUser?> currentUser = Rx<ShopifyUser?>(null);
+  var addressList = <Address>[].obs;
+  // ShopifyUser? currentUser;
   var userAccessToken = ''.obs;
 
 
-  Future<ShopifyUser?> checkUser()async{
+  Future<void> checkUser()async{
     ShopifyAuth shopifyAuth = ShopifyAuth.instance;
     var user = await shopifyAuth.currentUser();
-    currentUser = user;
-    return user;
+    var accessToken = await shopifyAuth.currentCustomerAccessToken;
+    currentUser.value = user;
+    addressList.value = user?.address?.addressList ?? [];
+    userAccessToken.value = accessToken ?? '';
   }
 
   Future<void> createUser(
@@ -39,14 +44,16 @@ class LoginController extends GetxController {
     debugPrint("Sign in User : ${signIn.id}");
     userAccessToken.value =  await shopifyAuth.currentCustomerAccessToken ?? '';
 
-    currentUser = signIn;
+    currentUser.value = signIn;
   }
 
   Future<void> signout()async{
     ShopifyAuth shopifyAuth = ShopifyAuth.instance;
-    await shopifyAuth.signOutCurrentUser();
-    userAccessToken.value = '';
-    currentUser = null;
+    await shopifyAuth.signOutCurrentUser().whenComplete(() {
+      userAccessToken.value = '';
+      currentUser.value = null;
+    });
+    update();
   }
 
   Future<void> forgottenPassword(String email)async{

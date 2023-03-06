@@ -61,10 +61,10 @@ class _LoginPageState extends State<LoginPage> {
     try {
 
       await loginController.signInWithEmailPass(email: email, password: password).then((value) {
-        Fluttertoast.showToast(msg: "User signed in as : ${loginController.currentUser!.email}");
-        debugPrint("User signed in as : ${loginController.currentUser!.email}");
+        Fluttertoast.showToast(msg: "User signed in as : ${loginController.currentUser.value?.email}");
+        debugPrint("User signed in as : ${loginController.currentUser.value?.email}");
         if(widget.loginRoute == LoginRoute.cartScreen){
-          Get.to(()=>PreCheckoutScreen(cartModelItems: cartController.cartModelItems));
+          Get.to(()=>PreCheckoutScreen(cartModelItems: cartController.cartModelItems,userType: PreCheckoutUserType.user,));
         }else if(widget.loginRoute == LoginRoute.settingsScreen){
           Fluttertoast.showToast(msg: "Routing to Settings");
           Get.to(() => MainScreen(selectedIndex: 4));

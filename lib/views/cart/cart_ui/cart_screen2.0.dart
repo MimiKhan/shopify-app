@@ -32,6 +32,7 @@ class _CartScreen2State extends State<CartScreen2> {
         ),
         centerTitle: true,
         backgroundColor: Colors.black,
+        // leading: Icon(CupertinoIcons.hom),
       ),
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -462,7 +463,7 @@ class _CartScreen2State extends State<CartScreen2> {
                             if (userLoggedIn) {
                               Get.to(() => PreCheckoutScreen(
                                   cartModelItems:
-                                      cartController.cartModelItems.value));
+                                      cartController.cartModelItems.value,userType: PreCheckoutUserType.user,),);
                             } else {
                               showDialog(
                                   context: context,
@@ -472,6 +473,14 @@ class _CartScreen2State extends State<CartScreen2> {
                                       content: const Text(
                                           'Do you want to sign in or continue as guest'),
                                       actions: [
+                                        TextButton(
+                                          onPressed: () {
+                                            Get.to(() => PreCheckoutScreen(
+                                              cartModelItems:
+                                              cartController.cartModelItems.value,userType: PreCheckoutUserType.guest,),);
+                                          },
+                                          child: const Text('Guest Checkout'),
+                                        ),
                                         TextButton(
                                           onPressed: () {
                                             Get.to(() => LoginPage(
@@ -517,10 +526,12 @@ class _CartScreen2State extends State<CartScreen2> {
   }
 
   Future<bool> checkUserFromShopify() async{
-    var user = await loginController.checkUser();
-    if(user?.id == null){
+    await loginController.checkUser();
+    if(loginController.currentUser.value?.id == null){
       return false;
+    }else{
+      return true;
     }
-    return true;
+
   }
 }

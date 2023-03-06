@@ -5,15 +5,23 @@ import 'package:lime_light_copy_shopify_store/controllers/cart_controller.dart';
 import 'package:lime_light_copy_shopify_store/controllers/checkout_controller.dart';
 import 'package:lime_light_copy_shopify_store/services/network.dart';
 import 'package:lime_light_copy_shopify_store/shopify_models/models/src/shopify_user/address/address.dart';
-import 'package:lime_light_copy_shopify_store/views/cart/cart_model.dart';
-import 'package:lime_light_copy_shopify_store/views/cart/cart_screen.dart';
+import 'package:lime_light_copy_shopify_store/models/cart_model.dart';
+import 'package:lime_light_copy_shopify_store/views/cart/cart_ui/cart_screen.dart';
 import 'package:lime_light_copy_shopify_store/views/checkout/checkout_screen.dart';
 
+
+enum PreCheckoutUserType {
+  user,
+  guest
+}
+
+
 class PreCheckoutScreen extends StatefulWidget {
-  const PreCheckoutScreen({Key? key, required this.cartModelItems})
+  const PreCheckoutScreen({Key? key, required this.cartModelItems, required this.userType})
       : super(key: key);
 
   final List<CartModel> cartModelItems;
+  final PreCheckoutUserType userType;
 
   @override
   State<PreCheckoutScreen> createState() => _PreCheckoutScreenState();

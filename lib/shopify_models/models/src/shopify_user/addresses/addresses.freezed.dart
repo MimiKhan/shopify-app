@@ -85,7 +85,7 @@ class __$$_AddressesCopyWithImpl<$Res>
   }) {
     return _then(_$_Addresses(
       addressList: null == addressList
-          ? _value._addressList
+          ? _value.addressList
           : addressList // ignore: cast_nullable_to_non_nullable
               as List<Address>,
     ));
@@ -95,20 +95,13 @@ class __$$_AddressesCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_Addresses extends _Addresses {
-  _$_Addresses({required final List<Address> addressList})
-      : _addressList = addressList,
-        super._();
+  _$_Addresses({required this.addressList}) : super._();
 
   factory _$_Addresses.fromJson(Map<String, dynamic> json) =>
       _$$_AddressesFromJson(json);
 
-  final List<Address> _addressList;
   @override
-  List<Address> get addressList {
-    if (_addressList is EqualUnmodifiableListView) return _addressList;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_addressList);
-  }
+  final List<Address> addressList;
 
   @override
   String toString() {
@@ -121,13 +114,13 @@ class _$_Addresses extends _Addresses {
         (other.runtimeType == runtimeType &&
             other is _$_Addresses &&
             const DeepCollectionEquality()
-                .equals(other._addressList, _addressList));
+                .equals(other.addressList, addressList));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(_addressList));
+      runtimeType, const DeepCollectionEquality().hash(addressList));
 
   @JsonKey(ignore: true)
   @override

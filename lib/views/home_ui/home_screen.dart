@@ -7,34 +7,60 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:lime_light_copy_shopify_store/controllers/cart_controller.dart';
 import 'package:lime_light_copy_shopify_store/controllers/home_controller.dart';
+import 'package:lime_light_copy_shopify_store/controllers/wish_list_controller.dart';
 import 'package:lime_light_copy_shopify_store/shopify_models/models/models.dart';
+import 'package:lime_light_copy_shopify_store/theme/app_style.dart';
+import 'package:lime_light_copy_shopify_store/views/cart/add_to_cart/new_add_to_cart_screen.dart';
 import 'package:lime_light_copy_shopify_store/views/categories/collections_details_screen.dart';
-import 'package:lime_light_copy_shopify_store/views/products_details/all_products_screen.dart';
-import 'package:lime_light_copy_shopify_store/views/cart/new_add_to_cart_screen.dart';
+import 'package:lime_light_copy_shopify_store/views/products_details/new_product_details_screen.dart';
 import 'package:lime_light_copy_shopify_store/widgets/exit_popup.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:toggle_switch/toggle_switch.dart';
 
 class HomeScreen extends StatefulWidget {
-  HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  // customiseSystemOverlay(){
+  //   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+  //       statusBarColor: Colors.transparent,
+  //       statusBarBrightness: Brightness.dark,
+  //       statusBarIconBrightness: Brightness.light));
+  // }
+
   final homeController = Get.find<HomeController>();
 
   final cartController = Get.find<CartController>();
+  final wishlistController = Get.find<WishListController>();
+  late bool _favIconState;
 
-  void _navigateToProductDetailScreen(Product product) {
+  int _currentIndex = 0;
+
+  void _toggleSwitch(int? index) {
+    setState(() {
+      _currentIndex = index!;
+    });
+  }
+
+  void _navigateToAddToCartScreen(Product product) {
     Fluttertoast.showToast(msg: 'Routing to ${product.title}');
     debugPrint(product.id);
     Get.to(() => NewAddToCartScreen(product: product));
   }
 
+  void _navigateToProductDetailScreen(Product product) {
+    Fluttertoast.showToast(msg: 'Routing to ${product.title}');
+    debugPrint(product.id);
+    Get.to(() => NewProductDetailsScreen(product: product));
+  }
+
   void _navigateToAllProductsScreen() {
     Fluttertoast.showToast(msg: 'Routing to All Products');
-    Get.to(() => const AllProducts());
+    Get.toNamed('/allProducts');
   }
 
   void _navigateToCollectionDetailScreen(
@@ -42,6 +68,7 @@ class _HomeScreenState extends State<HomeScreen> {
     Get.to(() => CollectionDetailScreen(
         collectionId: collectionId, collectionTitle: collectionTitle));
   }
+
   bool _shimmerUpperEnable = true;
   bool _shimmerLowerEnable = true;
 
@@ -53,12 +80,15 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> waitForShimmerEffect() async {
-    await Future.delayed(const Duration(seconds: 2),() {
-      setState(() {
-        _shimmerUpperEnable = false;
-        _shimmerLowerEnable = false;
-      });
-    },);
+    await Future.delayed(
+      const Duration(seconds: 1),
+      () {
+        setState(() {
+          _shimmerUpperEnable = false;
+          _shimmerLowerEnable = false;
+        });
+      },
+    );
   }
 
   @override
@@ -73,299 +103,165 @@ class _HomeScreenState extends State<HomeScreen> {
             physics: const AlwaysScrollableScrollPhysics(),
             child: Column(
               children: [
-                _shimmerUpperEnable ?
-                SizedBox(
-                  height: 320,
-                  child: Stack(
-                    fit: StackFit.expand,
-                    children: [
-                      Positioned(
-                        top: 60,
-                        left: 35,
-                        child: Shimmer.fromColors(
-                          enabled: _shimmerUpperEnable,baseColor: Colors.grey.shade300,
-                          highlightColor: Colors.grey.shade100,
-                          child: Container(width: 150,height: 20,color: Colors.white,),),
-                      ),
-                      Positioned(
-                        bottom: 7,
-                        left: size.width / 10.5,
-                        right: size.width / 10.5,
-                        child: Shimmer.fromColors(
-                          enabled: _shimmerUpperEnable,
-                          baseColor: Colors.grey.shade300,
-                          highlightColor: Colors.grey.shade100,
-
-                          child: Container(
-                            width: size.width * 0.9,
-                            height: 180,
-                            color: Colors.white,
-
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ):
-                SizedBox(
-                  height: 320,
-                  child: GetX<HomeController>(builder: (controller) {
-                    return Stack(
-                      fit: StackFit.expand,
-                      children: [
-                        // Image.network(controller.collections[0].image!.originalSrc,
-                        //     fit: BoxFit.cover),
-                        // ClipRRect(
-                        //   // Clip it cleanly.
-                        //   child: BackdropFilter(
-                        //     filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                        //     child: Container(
-                        //       color: Colors.grey.withOpacity(0),
-                        //       alignment: Alignment.center,
-                        //     ),
-                        //   ),
-                        // ),
-                        const Positioned(
-                          top: 60,
-                          left: 35,
-                          child: Text(
-                            "New Collection",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 28,
-                              color: Colors.blueGrey,
-                            ),
-                          ),
-                          //     .animate(
-                          //   effects: [
-                          //     const ShimmerEffect(
-                          //         color: Colors.white,
-                          //         delay: Duration(milliseconds: 100),
-                          //         duration: Duration(seconds: 2)),
-                          //   ],
-                          //   onComplete: (controller) {
-                          //     controller.repeat();
-                          //   },
-                          // ),
-                        ),
-
-                        controller.collectionsCount == 0
-                            ? const Center(
-                                child: CupertinoActivityIndicator(
-                                  radius: 14,
-                                ),
-                              )
-                            : Positioned(
-                                bottom: 7,
-                                left: size.width / 10.5,
-                                right: size.width / 10.5,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(15),
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      _navigateToCollectionDetailScreen(
-                                          controller.collections.first.id,
-                                          controller.collections.first.title);
-                                    },
-                                    child: SizedBox(
-                                      width: size.width * 0.9,
-                                      height: 180,
-                                      child:
-                                      // Image(
-                                      //   image: NetworkImage(controller
-                                      //       .collections[0].image!.originalSrc),
-                                      //   fit: BoxFit.cover,
-                                      //   width: 270,
-                                      //   height: 180,
-                                      // ),
-                                      CachedNetworkImage(
-                                        imageUrl: controller.collections.first.image?.originalSrc ?? '',
-                                        placeholder: (context, url) => Image.asset(
-                                            'assets/images/lime-light-logo.png',
-                                            fit: BoxFit.cover),
-                                        errorWidget: (context, url, error) => const Icon(Icons.error),
-                                        fit: BoxFit.contain,
-                                        height: 180,
-                                        width: 270,
-                                      ),
-                                    ),
-                                  ),
+                _shimmerUpperEnable
+                    ? SizedBox(
+                        height: 320,
+                        child: Stack(
+                          fit: StackFit.expand,
+                          children: [
+                            Positioned(
+                              top: 60,
+                              left: 35,
+                              child: Shimmer.fromColors(
+                                enabled: _shimmerUpperEnable,
+                                baseColor: Colors.grey.shade300,
+                                highlightColor: Colors.grey.shade100,
+                                child: Container(
+                                  width: 150,
+                                  height: 20,
+                                  color: Colors.white,
                                 ),
                               ),
-                      ],
-                    );
-                  }),
-                ),
+                            ),
+                            Positioned(
+                              bottom: 7,
+                              left: size.width / 10.5,
+                              right: size.width / 10.5,
+                              child: Shimmer.fromColors(
+                                enabled: _shimmerUpperEnable,
+                                baseColor: Colors.grey.shade300,
+                                highlightColor: Colors.grey.shade100,
+                                child: Container(
+                                  width: size.width * 0.9,
+                                  height: 180,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    : SizedBox(
+                        height: 320,
+                        child: GetX<HomeController>(builder: (controller) {
+                          return Stack(
+                            fit: StackFit.expand,
+                            children: [
+                              Positioned(
+                                top: 60,
+                                left: 35,
+                                child: Text(
+                                  "New Collection",
+                                  style: AppStyle.gfRighteousBoldBlack(
+                                      fontSize: 34),
+                                ),
+                              ),
+                              controller.collectionsCount == 0
+                                  ? const Center(
+                                      child: CupertinoActivityIndicator(
+                                        radius: 14,
+                                      ),
+                                    )
+                                  : Positioned(
+                                      bottom: 7,
+                                      left: size.width / 10.5,
+                                      right: size.width / 10.5,
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(15),
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            _navigateToCollectionDetailScreen(
+                                                controller.collections.first.id,
+                                                controller
+                                                    .collections.first.title);
+                                          },
+                                          child: SizedBox(
+                                            width: size.width * 0.9,
+                                            height: 180,
+                                            child:
+                                                // Image(
+                                                //   image: NetworkImage(controller
+                                                //       .collections[0].image!.originalSrc),
+                                                //   fit: BoxFit.cover,
+                                                //   width: 270,
+                                                //   height: 180,
+                                                // ),
+                                                CachedNetworkImage(
+                                              imageUrl: controller
+                                                      .collections
+                                                      .first
+                                                      .image
+                                                      ?.originalSrc ??
+                                                  '',
+                                              placeholder: (context, url) =>
+                                                  Image.asset(
+                                                      'assets/images/lime-light-logo.png',
+                                                      fit: BoxFit.cover),
+                                              errorWidget:
+                                                  (context, url, error) =>
+                                                      const Icon(Icons.error),
+                                              fit: BoxFit.contain,
+                                              height: 180,
+                                              width: 270,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                            ],
+                          );
+                        }),
+                      ),
                 const SizedBox(
                   height: 40,
                 ),
-                _shimmerLowerEnable ?
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 15.0,
-                      ),
-                      child: Row(
+                _shimmerLowerEnable
+                    ? Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Shimmer.fromColors(
-                            enabled: _shimmerLowerEnable,
-                            baseColor: Colors.grey.shade300,
-                            highlightColor: Colors.grey.shade100,
-                            child: Container(width: 120,height: 15,color: Colors.white,),),
-                          Shimmer.fromColors(
-                            enabled: _shimmerLowerEnable,baseColor: Colors.grey.shade300,
-                            highlightColor: Colors.grey.shade100,
-                            child: Container(width: 80,height: 15,color: Colors.white,),),
-                        ],
-                      ),
-                    ),
-                    ListView(
-                        scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        children: [
-                          GridView.builder(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              scrollDirection: Axis.vertical,
-                              padding:
-                              const EdgeInsets.symmetric(horizontal: 10),
-                              gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                // childAspectRatio: 1,
-                                crossAxisSpacing: 11,
-                                mainAxisSpacing: 10,
-                                mainAxisExtent: 400,
-                              ),
-                              itemCount: 4,
-                              itemBuilder:
-                                  (BuildContext context, int gridViewIndex) {
-                                // var quantityAvailable = controller
-                                //     .bestSellingProducts[gridViewIndex]
-                                //     .productVariants[0]
-                                //     .quantityAvailable!;
-                                return Container(
-                                  width: 150,
-                                  height: 400,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(15),
-                                    // border: Border.all(width: 0.7, color: Colors.grey),
-                                    shape: BoxShape.rectangle,
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 15.0,
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Shimmer.fromColors(
+                                  enabled: _shimmerLowerEnable,
+                                  baseColor: Colors.grey.shade300,
+                                  highlightColor: Colors.grey.shade100,
+                                  child: Container(
+                                    width: 120,
+                                    height: 15,
                                     color: Colors.white,
                                   ),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                    children: [
-                                      ClipRRect(
-                                        borderRadius:
-                                        const BorderRadius.only(
-                                            topLeft:
-                                            Radius.circular(15),
-                                            topRight:
-                                            Radius.circular(15)),
-                                        child: Shimmer.fromColors(
-                                          enabled: _shimmerLowerEnable,
-                                          baseColor: Colors.grey.shade300,
-                                          highlightColor: Colors.grey.shade100,
-                                          child: Container(
-                                            width: 175,
-                                            height: 200,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 5.0, vertical: 5),
-                                        child: Shimmer.fromColors(
-                                          enabled: _shimmerLowerEnable,
-                                          baseColor: Colors.grey.shade300,
-                                          highlightColor: Colors.grey.shade100,
-                                          child: Container(
-                                            width: 180,
-                                            height: 20,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 5,
-                                      ),
-                                      Shimmer.fromColors(
-                                        enabled: _shimmerLowerEnable,
-                                        baseColor: Colors.grey.shade300,
-                                        highlightColor: Colors.grey.shade100,
-                                        child: Container(
-                                          width: 120,
-                                          height: 25,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    ],
+                                ),
+                                Shimmer.fromColors(
+                                  enabled: _shimmerLowerEnable,
+                                  baseColor: Colors.grey.shade300,
+                                  highlightColor: Colors.grey.shade100,
+                                  child: Container(
+                                    width: 80,
+                                    height: 15,
+                                    color: Colors.white,
                                   ),
-                                );
-                              })
-                        ]),
-                  ],
-                ):
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 15.0,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            'Trending',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 22,
-                                color: Colors.black),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              _navigateToAllProductsScreen();
-                            },
-                            child: const Text(
-                              'See All',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 19,
-                                  color: Colors.cyan),
+                                ),
+                              ],
                             ),
                           ),
-                        ],
-                      ),
-                    ),
-                    GetX<HomeController>(builder: (controller) {
-                      return controller.collectionsCount == 0
-                          ? const Center(
-                              child: CupertinoActivityIndicator(
-                                radius: 14,
-                              ),
-                            )
-                          : ListView(
+                          ListView(
                               scrollDirection: Axis.vertical,
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
                               children: [
                                 GridView.builder(
                                     shrinkWrap: true,
-                                    physics: const NeverScrollableScrollPhysics(),
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
                                     scrollDirection: Axis.vertical,
-                                    padding:
-                                        const EdgeInsets.symmetric(horizontal: 10),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10),
                                     gridDelegate:
                                         const SliverGridDelegateWithFixedCrossAxisCount(
                                       crossAxisCount: 2,
@@ -374,162 +270,548 @@ class _HomeScreenState extends State<HomeScreen> {
                                       mainAxisSpacing: 10,
                                       mainAxisExtent: 400,
                                     ),
-                                    itemCount:
-                                        controller.bestSellingProducts.length,
-                                    itemBuilder:
-                                        (BuildContext context, int gridViewIndex) {
+                                    itemCount: 4,
+                                    itemBuilder: (BuildContext context,
+                                        int gridViewIndex) {
                                       // var quantityAvailable = controller
                                       //     .bestSellingProducts[gridViewIndex]
                                       //     .productVariants[0]
                                       //     .quantityAvailable!;
-                                      return GestureDetector(
-                                        onTap: () {
-                                          debugPrint(
-                                              "GridView Index : $gridViewIndex");
-                                          debugPrint(
-                                              "Product ID : ${controller.bestSellingProducts[gridViewIndex].id}");
-                                          _navigateToProductDetailScreen(controller
-                                              .bestSellingProducts[gridViewIndex]);
-                                        },
-                                        child: Container(
-                                          width: 150,
-                                          height: 400,
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(15),
-                                            // border: Border.all(width: 0.7, color: Colors.grey),
-                                            shape: BoxShape.rectangle,
-                                            color: Colors.white,
-                                          ),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                            children: [
-                                              ClipRRect(
-                                                borderRadius:
-                                                    const BorderRadius.only(
-                                                        topLeft:
-                                                            Radius.circular(15),
-                                                        topRight:
-                                                            Radius.circular(15)),
-                                                child: SizedBox(
-                                                  height: 245,
-                                                  width: 195,
-                                                  child:
-                                                  // Image(
-                                                  //   image: NetworkImage(controller
-                                                  //       .bestSellingProducts[
-                                                  //           gridViewIndex]
-                                                  //       .images[0]
-                                                  //       .originalSrc),
-                                                  //   fit: BoxFit.fill,
-                                                  // ),
-                                                  CachedNetworkImage(
-                                                    imageUrl: controller.bestSellingProducts[gridViewIndex].images[0].originalSrc,
-                                                    placeholder: (context, url) => Image.asset(
-                                                        'assets/images/lime-light-logo.png',
-                                                        fit: BoxFit.cover),
-                                                    errorWidget: (context, url, error) => const Icon(Icons.error),
-                                                    fit: BoxFit.fill,
-                                                  ),
+                                      return Container(
+                                        width: 150,
+                                        height: 400,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                          // border: Border.all(width: 0.7, color: Colors.grey),
+                                          shape: BoxShape.rectangle,
+                                          color: Colors.white,
+                                        ),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
+                                          children: [
+                                            ClipRRect(
+                                              borderRadius:
+                                                  const BorderRadius.only(
+                                                      topLeft:
+                                                          Radius.circular(15),
+                                                      topRight:
+                                                          Radius.circular(15)),
+                                              child: Shimmer.fromColors(
+                                                enabled: _shimmerLowerEnable,
+                                                baseColor: Colors.grey.shade300,
+                                                highlightColor:
+                                                    Colors.grey.shade100,
+                                                child: Container(
+                                                  width: 175,
+                                                  height: 200,
+                                                  color: Colors.white,
                                                 ),
                                               ),
-                                              Padding(
-                                                padding: const EdgeInsets.symmetric(
-                                                    horizontal: 5.0, vertical: 5),
-                                                child: Align(
-                                                    alignment: Alignment.centerLeft,
-                                                    child: Text(
-                                                      controller
-                                                          .bestSellingProducts[
-                                                              gridViewIndex]
-                                                          .title,
-                                                      style: const TextStyle(
-                                                        fontSize: 14,
-                                                        color: Colors.black,
-                                                      ),
-                                                      softWrap: true,
-                                                    )),
-                                              ),
-                                              const SizedBox(
-                                                height: 5,
-                                              ),
-                                              Align(
-                                                alignment: Alignment.bottomCenter,
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      controller
-                                                          .bestSellingProducts[
-                                                              gridViewIndex]
-                                                          .productVariants[0]
-                                                          .price
-                                                          .formattedPrice,
-                                                      style: const TextStyle(
-                                                          color: Colors.black,
-                                                          fontSize: 18,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                  ],
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 5.0,
+                                                      vertical: 5),
+                                              child: Shimmer.fromColors(
+                                                enabled: _shimmerLowerEnable,
+                                                baseColor: Colors.grey.shade300,
+                                                highlightColor:
+                                                    Colors.grey.shade100,
+                                                child: Container(
+                                                  width: 180,
+                                                  height: 20,
+                                                  color: Colors.white,
                                                 ),
                                               ),
-                                              // Quantity Text
-                                              /*Text(
-                                                controller
-                                                    .bestSellingProducts[
-                                                gridViewIndex]
-                                                    .productVariants[
-                                                0]
-                                                    .quantityAvailable! >
-                                                    0
-                                                    ? quantityAvailable < 10
-                                                    ? 'Only $quantityAvailable available'
-                                                    : 'In Stock'
-                                                    : 'Out of Stock',
-                                                style: TextStyle(
-                                                  color: controller
-                                                      .bestSellingProducts[
-                                                  gridViewIndex]
-                                                      .productVariants[
-                                                  0]
-                                                      .quantityAvailable! >
-                                                      0
-                                                      ? Colors.green
-                                                      : Colors.red,
-                                                ),
+                                            ),
+                                            const SizedBox(
+                                              height: 5,
+                                            ),
+                                            Shimmer.fromColors(
+                                              enabled: _shimmerLowerEnable,
+                                              baseColor: Colors.grey.shade300,
+                                              highlightColor:
+                                                  Colors.grey.shade100,
+                                              child: Container(
+                                                width: 120,
+                                                height: 25,
+                                                color: Colors.white,
                                               ),
-
-
-                                              Add to Cart Icon Button*/
-                                              /*IconButton(
-                                                onPressed: () {
-                                                  if (quantityAvailable == 0) {
-                                                    Fluttertoast.showToast(
-                                                        msg:
-                                                            'No quantity available for ${controller.bestSellingProducts[gridViewIndex].title}.');
-                                                  } else {
-                                                    Get.to(()=> AddToCartScreen(product: controller.bestSellingProducts[gridViewIndex]));
-                                                    debugPrint(
-                                                        "Bag Items Count : ${cartController.cartModelItemsCount}");
-                                                  }
-                                                },
-                                                icon: const Icon(
-                                                    CupertinoIcons.bag_badge_plus),
-                                                iconSize: 30,
-                                              ),*/
-                                            ],
-                                          ),
+                                            ),
+                                          ],
                                         ),
                                       );
                                     })
+                              ]),
+                        ],
+                      )
+                    : Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 15.0,
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('Trending',
+                                    style: AppStyle.gfABeeZeeBoldBlack(
+                                        fontSize: 25)),
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.black,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    _navigateToAllProductsScreen();
+                                  },
+                                  child: Text(
+                                    'See All',
+                                    style: AppStyle.gfABeeZeeMediumWhite(
+                                        fontSize: 19),
+                                  ),
+                                ),
                               ],
-                            );
-                    })
-                  ],
-                ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                // const Icon(Icons.grid_view_rounded),
+                                // const SizedBox(width: 10,),
+                                // GestureDetector(onTap: (){setState(() {
+                                //   listOrGrid = !listOrGrid;
+                                // });},child: const Icon(CupertinoIcons.list_bullet)),
+                                ToggleSwitch(
+                                  iconSize: 28,
+                                  totalSwitches: 2,
+                                  icons: const [
+                                    Icons.grid_view_rounded,
+                                    CupertinoIcons.list_bullet
+                                  ],
+                                  initialLabelIndex: _currentIndex,
+                                  onToggle: _toggleSwitch,
+                                  minWidth: 90,
+                                  minHeight: 40,
+                                  cornerRadius: 20,
+                                  activeBgColor: const [Colors.black],
+                                  activeFgColor: Colors.white,
+                                  inactiveBgColor: Colors.grey,
+                                  inactiveFgColor: Colors.white,
+                                )
+                              ],
+                            ),
+                          ),
+                          GetX<HomeController>(builder: (controller) {
+                            return controller.productsCount == 0
+                                ? const Center(
+                                    child: CupertinoActivityIndicator(
+                                      radius: 14,
+                                    ),
+                                  )
+                                : _currentIndex == 0
+                                    ? ListView(
+                                        scrollDirection: Axis.vertical,
+                                        shrinkWrap: true,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        children: [
+                                          GridView.builder(
+                                              shrinkWrap: true,
+                                              physics:
+                                                  const NeverScrollableScrollPhysics(),
+                                              scrollDirection: Axis.vertical,
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 10),
+                                              gridDelegate:
+                                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                                crossAxisCount: 2,
+                                                // childAspectRatio: 1,
+                                                crossAxisSpacing: 11,
+                                                mainAxisSpacing: 10,
+                                                mainAxisExtent: 400,
+                                              ),
+                                              itemCount: controller
+                                                  .bestSellingProducts.length,
+                                              itemBuilder:
+                                                  (BuildContext context,
+                                                      int gridViewIndex) {
+                                                _favIconState = wishlistController
+                                                    .favouritesList
+                                                    .contains(controller
+                                                            .bestSellingProducts[
+                                                        gridViewIndex]);
+                                                debugPrint(
+                                                    "Fav Icon State (${controller.bestSellingProducts[gridViewIndex].title}): $_favIconState");
+                                                return GestureDetector(
+                                                  onTap: () {
+                                                    debugPrint(
+                                                        "GridView Index : $gridViewIndex");
+                                                    debugPrint(
+                                                        "Product ID : ${controller.bestSellingProducts[gridViewIndex].id}");
+                                                    _navigateToProductDetailScreen(
+                                                        controller
+                                                                .bestSellingProducts[
+                                                            gridViewIndex]);
+                                                  },
+                                                  child: Stack(
+                                                    fit: StackFit.expand,
+                                                    children: [
+                                                      Container(
+                                                        width: 150,
+                                                        height: 400,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            15),
+                                                                // border: Border.all(width: 0.7, color: Colors.grey),
+                                                                shape: BoxShape
+                                                                    .rectangle,),
+                                                        child: Column(
+                                                          children: [
+                                                            ClipRRect(
+                                                              borderRadius: const BorderRadius
+                                                                      .only(
+                                                                  topLeft: Radius
+                                                                      .circular(
+                                                                          15),
+                                                                  topRight: Radius
+                                                                      .circular(
+                                                                          15)),
+                                                              child: SizedBox(
+                                                                height: 245,
+                                                                width: 195,
+                                                                child:
+                                                                    CachedNetworkImage(
+                                                                  imageUrl: controller
+                                                                      .bestSellingProducts[
+                                                                          gridViewIndex]
+                                                                      .images[0]
+                                                                      .originalSrc,
+                                                                  placeholder: (context,
+                                                                          url) =>
+                                                                      Image.asset(
+                                                                          'assets/images/lime-light-logo.png',
+                                                                          fit: BoxFit
+                                                                              .cover),
+                                                                  errorWidget: (context,
+                                                                          url,
+                                                                          error) =>
+                                                                      const Icon(
+                                                                          Icons
+                                                                              .error),
+                                                                  fit: BoxFit
+                                                                      .fill,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            Align(
+                                                              alignment: Alignment
+                                                                  .centerLeft,
+                                                              child: Padding(
+                                                                padding: const EdgeInsets
+                                                                        .symmetric(
+                                                                    horizontal:
+                                                                        7,
+                                                                    vertical:
+                                                                        8.0),
+                                                                child: Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .spaceBetween,
+                                                                  children: [
+                                                                    Text(
+                                                                      controller
+                                                                          .bestSellingProducts[
+                                                                              gridViewIndex]
+                                                                          .productVariants[
+                                                                              0]
+                                                                          .price
+                                                                          .formattedPrice,
+                                                                      style: AppStyle.gfABeeZeeBoldBlack(
+                                                                          fontSize:
+                                                                              22),
+                                                                    ),
+                                                                    IconButton(
+                                                                      onPressed:
+                                                                          () {
+                                                                        _navigateToAddToCartScreen(
+                                                                            controller.bestSellingProducts[gridViewIndex]);
+                                                                      },
+                                                                      icon:
+                                                                          const Icon(
+                                                                        CupertinoIcons
+                                                                            .bag_badge_plus,
+                                                                        color: Colors
+                                                                            .black,
+                                                                        size:
+                                                                            25,
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            Padding(
+                                                              padding: const EdgeInsets
+                                                                      .symmetric(
+                                                                  horizontal:
+                                                                      10),
+                                                              child: Text(
+                                                                controller
+                                                                    .bestSellingProducts[
+                                                                        gridViewIndex]
+                                                                    .title,
+                                                                style: AppStyle
+                                                                    .gfABeeZeeMediumBlack(
+                                                                        fontSize:
+                                                                            13),
+                                                                softWrap: true,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      Positioned(
+                                                        top: 4,
+                                                        right: 4,
+                                                        child: IconButton(
+                                                          key: UniqueKey(),
+                                                          onPressed: () {
+                                                            setState(() {
+                                                              wishlistController
+                                                                  .toggleFavorites(
+                                                                      controller
+                                                                              .bestSellingProducts[
+                                                                          gridViewIndex]);
+                                                            });
+                                                            debugPrint(
+                                                                "Length of Fav List : ${wishlistController.favouritesList.length}");
+                                                          },
+                                                          icon: Icon(
+                                                            _favIconState
+                                                                ? Icons.favorite
+                                                                : Icons
+                                                                    .favorite_border_outlined,
+                                                            color: _favIconState
+                                                                ? Colors.red
+                                                                : null,
+                                                            size: 24,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                );
+                                              }),
+                                        ],
+                                      )
+                                    : ListView.builder(
+                                        itemCount: controller.productsCount,
+                                        shrinkWrap: true,
+                                        scrollDirection: Axis.vertical,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                              _favIconState = wishlistController
+                                                  .favouritesList
+                                                  .contains(controller
+                                                  .bestSellingProducts[
+                                              index]);
+                                          return Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 15.0, vertical: 10),
+                                            child: Container(
+                                              width: size.width - 21,
+                                              height: 200,
+                                              child: Stack(
+                                                fit: StackFit.loose,
+                                                children: [
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    children: [
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(10.0),
+                                                        child: SizedBox(
+                                                          width: 145,
+                                                          height: 180,
+                                                          child: ClipRRect(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        15),
+                                                            child:
+                                                                CachedNetworkImage(
+                                                              imageUrl: controller
+                                                                  .bestSellingProducts[
+                                                                      index]
+                                                                  .images
+                                                                  .first
+                                                                  .originalSrc,
+                                                              placeholder: (context,
+                                                                      url) =>
+                                                                  Image.asset(
+                                                                      'assets/images/lime-light-logo.png',
+                                                                      fit: BoxFit
+                                                                          .cover),
+                                                              errorWidget: (context,
+                                                                      url,
+                                                                      error) =>
+                                                                  const Icon(Icons
+                                                                      .error),
+                                                              fit: BoxFit.fill,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      const SizedBox(
+                                                        width: 5,
+                                                      ),
+                                                      Column(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Flexible(
+                                                            fit: FlexFit.loose,
+                                                            flex: 2,
+                                                            child: SizedBox(
+                                                              width: 210,
+                                                              child: Text(
+                                                                controller
+                                                                    .bestSellingProducts[
+                                                                        index]
+                                                                    .title,
+                                                                style: AppStyle
+                                                                    .gfABeeZeeMediumBlack(
+                                                                        fontSize:
+                                                                            15),
+                                                                softWrap: true,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          const SizedBox(
+                                                            height: 15,
+                                                          ),
+                                                          Text(
+                                                            controller
+                                                                .bestSellingProducts[
+                                                                    index]
+                                                                .productVariants
+                                                                .first
+                                                                .price
+                                                                .formattedPrice,
+                                                            style: AppStyle
+                                                                .gfABeeZeeBoldBlack(
+                                                                    fontSize:
+                                                                        18),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  Positioned(
+                                                    top: 0,
+                                                    right: 0,
+                                                    child: /*InkWell(
+                                                      key: UniqueKey(),
+                                                      onTap: () {
+                                                        setState(() {
+                                                          wishlistController
+                                                              .toggleFavorites(
+                                                                  controller
+                                                                          .bestSellingProducts[
+                                                                      index]);
+                                                        });
+                                                        debugPrint(
+                                                            "Length of Fav List : ${wishlistController.favouritesList.length}");
+                                                      },
+                                                      child: Icon(
+                                                        _favIconState
+                                                            ? Icons.favorite
+                                                            : Icons
+                                                                .favorite_border_outlined,
+                                                        color: _favIconState
+                                                            ? Colors.red
+                                                            : null,
+                                                        size: 24,
+                                                      ),
+                                                    ),*/
+                                                    IconButton(
+                                                      key: UniqueKey(),
+                                                      onPressed: () {
+                                                        setState(() {
+                                                          wishlistController
+                                                              .toggleFavorites(
+                                                              controller
+                                                                  .bestSellingProducts[
+                                                              index]);
+                                                        });
+                                                        debugPrint(
+                                                            "Length of Fav List : ${wishlistController.favouritesList.length}");
+                                                      },
+                                                      icon: Icon(
+                                                        _favIconState
+                                                            ? Icons.favorite
+                                                            : Icons
+                                                            .favorite_border_outlined,
+                                                        color: _favIconState
+                                                            ? Colors.red
+                                                            : null,
+                                                        size: 24,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Positioned(
+                                                    bottom: 0,
+                                                    right: 0,
+                                                    child: IconButton(
+                                                      onPressed: () {
+                                                        _navigateToAddToCartScreen(
+                                                            controller
+                                                                .bestSellingProducts[
+                                                            index]);
+                                                      },
+                                                      icon:
+                                                      const Icon(
+                                                        CupertinoIcons
+                                                            .bag_badge_plus,
+                                                        color: Colors
+                                                            .black,
+                                                        size: 25,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      );
+                          })
+                        ],
+                      ),
               ],
             ),
           ),

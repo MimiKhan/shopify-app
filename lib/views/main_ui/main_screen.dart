@@ -4,8 +4,8 @@ import 'package:badges/badges.dart' as badges;
 import 'package:get/get.dart';
 import 'package:lime_light_copy_shopify_store/controllers/cart_controller.dart';
 import 'package:lime_light_copy_shopify_store/services/hex_color.dart';
-import 'package:lime_light_copy_shopify_store/views/cart/cart_screen.dart';
-import 'package:lime_light_copy_shopify_store/views/cart/cart_screen2.0.dart';
+import 'package:lime_light_copy_shopify_store/views/cart/cart_ui/cart_screen.dart';
+import 'package:lime_light_copy_shopify_store/views/cart/cart_ui/cart_screen2.0.dart';
 import 'package:lime_light_copy_shopify_store/views/categories/collections_screen.dart';
 import 'package:lime_light_copy_shopify_store/views/home_ui/home_screen.dart';
 import 'package:lime_light_copy_shopify_store/views/search/search_screen.dart';
@@ -150,15 +150,11 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () => showExitPopup(context),
-      child: Scaffold(
-              extendBody: true,
-              resizeToAvoidBottomInset: true,
-              bottomNavigationBar: buildNavigationBar(),
-              body: pagesList[widget.selectedIndex])
-
-    );
+    return Scaffold(
+            extendBody: true,
+            resizeToAvoidBottomInset: true,
+            bottomNavigationBar: buildNavigationBar(),
+            body: pagesList[widget.selectedIndex]);
   }
 
   buildNavigationBar() {

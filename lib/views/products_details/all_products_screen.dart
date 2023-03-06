@@ -6,8 +6,9 @@ import 'package:lime_light_copy_shopify_store/controllers/cart_controller.dart';
 import 'package:lime_light_copy_shopify_store/controllers/products_list_controller.dart';
 import 'package:lime_light_copy_shopify_store/controllers/wish_list_controller.dart';
 import 'package:lime_light_copy_shopify_store/shopify_models/models/src/product/product.dart';
-import 'package:lime_light_copy_shopify_store/views/cart/new_add_to_cart_screen.dart';
-import 'package:lime_light_copy_shopify_store/views/products_details/product_details_screen.dart';
+import 'package:lime_light_copy_shopify_store/theme/app_style.dart';
+import 'package:lime_light_copy_shopify_store/views/cart/add_to_cart/new_add_to_cart_screen.dart';
+import 'package:lime_light_copy_shopify_store/views/products_details/new_product_details_screen.dart';
 import 'package:shimmer/shimmer.dart';
 
 class AllProducts extends StatefulWidget {
@@ -70,27 +71,31 @@ class _AllProductsState extends State<AllProducts>
   void _navigateToProductDetailScreen(Product product) {
     debugPrint('Routing to ${product.id}');
     // Fluttertoast.showToast(msg: 'Routing to ${product.title}');
-    Get.to(() => NewAddToCartScreen(product: product));
+    Get.to(() => NewProductDetailsScreen(product: product));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey,
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text(
-          'All Products',
-          style: TextStyle(fontSize: 28, color: Colors.white),
+        iconTheme: const IconThemeData(
+          color: Colors.white, // set the color of the back icon here
+        ),
+        title: Text(
+          'Products',
+          style: AppStyle.gfABeeZeeBoldWhite(fontSize: 26),
         ),
         centerTitle: true,
-        backgroundColor: Colors.deepPurple,
+        backgroundColor: Colors.black,
       ),
       floatingActionButton: _showBackToTopButton == false
           ? null
           : FloatingActionButton.extended(
+        backgroundColor:Colors.black,
               onPressed: _scrollToTop,
-              label: const Text("Return to top"),
-              icon: const Icon(Icons.arrow_upward),
+              label: Text("Return to top",style: AppStyle.gfABeeZeeMediumWhite(fontSize: 18),),
+              icon: const Icon(Icons.arrow_upward,color: Colors.white,),
             ),
       body: SingleChildScrollView(
         controller: _scrollController,

@@ -5,11 +5,11 @@ import 'package:get/get.dart';
 import 'package:lime_light_copy_shopify_store/controllers/cart_controller.dart';
 import 'package:lime_light_copy_shopify_store/controllers/wish_list_controller.dart';
 import 'package:lime_light_copy_shopify_store/shopify_models/models/models.dart';
+import 'package:lime_light_copy_shopify_store/views/cart/add_to_cart/new_add_to_cart_screen.dart';
 import 'package:lime_light_copy_shopify_store/views/main_ui/main_screen.dart';
 import 'package:html2md/html2md.dart' as html2md;
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:lime_light_copy_shopify_store/views/products_details/custom_image_view.dart';
-import 'package:lime_light_copy_shopify_store/views/cart/new_add_to_cart_screen.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   final Product product;

@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:lime_light_copy_shopify_store/views/cart/cart_screen.dart';
+import 'package:lime_light_copy_shopify_store/views/cart/cart_ui/cart_screen.dart';
 import 'package:lime_light_copy_shopify_store/views/categories/collections_screen.dart';
 import 'package:lime_light_copy_shopify_store/views/home_ui/home_screen.dart';
 import 'package:lime_light_copy_shopify_store/views/search/search_screen.dart';

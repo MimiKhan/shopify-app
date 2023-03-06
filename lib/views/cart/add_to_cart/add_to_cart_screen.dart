@@ -7,7 +7,7 @@ import 'package:lime_light_copy_shopify_store/controllers/cart_controller.dart';
 import 'package:lime_light_copy_shopify_store/shopify_models/flutter_simple_shopify.dart';
 import 'package:lime_light_copy_shopify_store/shopify_models/models/src/product/product.dart';
 import 'package:lime_light_copy_shopify_store/shopify_models/models/src/product/product_variant/product_variant.dart';
-import 'package:lime_light_copy_shopify_store/views/cart/cart_model.dart';
+import 'package:lime_light_copy_shopify_store/models/cart_model.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class AddToCartScreen extends StatefulWidget {

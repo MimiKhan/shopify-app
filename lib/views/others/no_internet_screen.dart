@@ -24,7 +24,7 @@ class NoInternetScreen extends StatelessWidget {
                       const SizedBox(height: 25),
                       const Icon(Icons.cloud_off),
                       const SizedBox(height: 25),
-                      Text('No network connection.',style: AppStyle.txtPoppinsMedium20,),
+                      Text('No network connection.',style: AppStyle.gfABeeZeeMediumBlack(fontSize: 20),),
                       const SizedBox(height: 20),
                       ElevatedButton(
                         onPressed: () async {
@@ -39,7 +39,7 @@ class NoInternetScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(5),
                           )
                         ),
-                        child: Text('Try Again',style: AppStyle.txtPoppinsMedium20,),
+                        child: Text('Try Again',style: AppStyle.gfABeeZeeMediumBlack(fontSize: 20),),
                       ),
                     ],
                   ),

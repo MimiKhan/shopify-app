@@ -6,7 +6,7 @@ import 'package:lime_light_copy_shopify_store/models/country_data_model.dart';
 import 'package:lime_light_copy_shopify_store/shopify_models/flutter_simple_shopify.dart';
 import 'package:lime_light_copy_shopify_store/shopify_models/models/src/order/discount_allocations/discount_allocations.dart';
 import 'package:lime_light_copy_shopify_store/shopify_models/models/src/product/price_v_2/price_v_2.dart';
-import 'package:lime_light_copy_shopify_store/views/cart/cart_model.dart';
+import 'package:lime_light_copy_shopify_store/models/cart_model.dart';
 
 class CartController extends GetxController {
   var cartModelItems = <CartModel>[].obs;

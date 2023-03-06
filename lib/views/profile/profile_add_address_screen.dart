@@ -5,10 +5,18 @@ import 'package:get/get.dart';
 import 'package:lime_light_copy_shopify_store/controllers/customer_controller.dart';
 import 'package:lime_light_copy_shopify_store/controllers/login_controller.dart';
 import 'package:lime_light_copy_shopify_store/core/utils/color_constant.dart';
+import 'package:lime_light_copy_shopify_store/shopify_models/models/src/shopify_user/address/address.dart';
 import 'package:lime_light_copy_shopify_store/theme/app_style.dart';
 
+enum AddressType { newAddress, editAddress }
+
 class ProfileAddAddressScreen extends StatefulWidget {
-  const ProfileAddAddressScreen({Key? key}) : super(key: key);
+  final Address? address;
+  final AddressType addressType;
+
+  const ProfileAddAddressScreen(
+      {Key? key, required this.address, required this.addressType})
+      : super(key: key);
 
   @override
   State<ProfileAddAddressScreen> createState() =>
@@ -29,19 +37,40 @@ class _ProfileAddAddressScreenState extends State<ProfileAddAddressScreen> {
   final _zipController = TextEditingController();
   final _phoneController = TextEditingController();
 
+  var address;
+  var addressIndex;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _firstNameController.text = '${loginController.currentUser?.firstName}';
-    _lastNameController.text = '${loginController.currentUser?.lastName}';
-    _address1Controller.text = 'Chak # 91/9-L Arifwala road';
-    _address2Controller.text = 'Opposite M.A. Foods';
-    _cityController.text = 'Sahiwal';
-    _provinceController.text = 'Punjab';
-    _countryController.text = 'Pakistan';
-    _zipController.text = '57000';
-    _phoneController.text = '+923009691591';
+    debugPrint('${widget.addressType}');
+    if (widget.addressType == AddressType.editAddress) {
+      debugPrint("Address *: ${widget.address?.id}");
+      addressIndex = loginController.currentUser.value?.address?.addressList
+          .indexWhere((element) => element.id == widget.address?.id);
+      debugPrint("Address Index **: $addressIndex");
+
+      _firstNameController.text = '${widget.address?.firstName}';
+      _lastNameController.text = '${widget.address?.lastName}';
+      _address1Controller.text = '${widget.address?.address1}';
+      _address2Controller.text = '${widget.address?.address2}';
+      _cityController.text = '${widget.address?.city}';
+      _provinceController.text = '${widget.address?.province}';
+      _countryController.text = '${widget.address?.country}';
+      _zipController.text = '${widget.address?.zip}';
+      _phoneController.text = '${widget.address?.phone}';
+    } else if (widget.addressType == AddressType.newAddress) {
+      _firstNameController.text = 'Mimi';
+      _lastNameController.text = 'Khan';
+      _address1Controller.text = 'Chak # 91/9-L Arifwala road';
+      _address2Controller.text = 'Opposite M.A. Foods';
+      _cityController.text = 'Sahiwal';
+      _provinceController.text = 'Punjab';
+      _countryController.text = 'Pakistan';
+      _zipController.text = '57000';
+      _phoneController.text = '+923009691591';
+    }
   }
 
   @override
@@ -55,7 +84,7 @@ class _ProfileAddAddressScreenState extends State<ProfileAddAddressScreen> {
         backgroundColor: Colors.black,
         title: Text(
           'Add Address',
-          style: AppStyle.txtPoppinsMedium20.copyWith(color: Colors.white),
+          style: AppStyle.gfABeeZeeBoldWhite(fontSize: 18),
         ),
         centerTitle: true,
       ),
@@ -68,11 +97,14 @@ class _ProfileAddAddressScreenState extends State<ProfileAddAddressScreen> {
           child: Column(
             children: [
               const SizedBox(
-                height: 15,
+                height: 8,
               ),
               Text(
-                '* Please provide required information to add new address.',
-                style: AppStyle.txtPoppinsMedium14,
+                '* Please provide required information to add new/edit address.',
+                style: AppStyle.gfABeeZeeBoldBlack(fontSize: 12),
+              ),
+              const SizedBox(
+                height: 15,
               ),
               Padding(
                 padding: const EdgeInsets.all(10.0),
@@ -81,11 +113,11 @@ class _ProfileAddAddressScreenState extends State<ProfileAddAddressScreen> {
                   height: 50,
                   child: TextField(
                     controller: _firstNameController,
-                    style: AppStyle.txtInterRegular22,
+                    style: AppStyle.gfABeeZeeRegularBlack(fontSize: 21),
                     decoration: InputDecoration(
                       label: Text(
                         'First Name',
-                        style: AppStyle.txtPoppinsMedium20,
+                        style: AppStyle.gfABeeZeeMediumBlack(fontSize: 20),
                       ),
                       filled: true,
                       fillColor: ColorConstant.gray100,
@@ -115,11 +147,11 @@ class _ProfileAddAddressScreenState extends State<ProfileAddAddressScreen> {
                   height: 50,
                   child: TextField(
                     controller: _lastNameController,
-                    style: AppStyle.txtInterRegular22,
+                    style: AppStyle.gfABeeZeeRegularBlack(fontSize: 21),
                     decoration: InputDecoration(
                       label: Text(
                         'Last Name',
-                        style: AppStyle.txtPoppinsMedium20,
+                        style: AppStyle.gfABeeZeeMediumBlack(fontSize: 20),
                       ),
                       filled: true,
                       fillColor: ColorConstant.gray100,
@@ -151,11 +183,11 @@ class _ProfileAddAddressScreenState extends State<ProfileAddAddressScreen> {
                   height: 50,
                   child: TextField(
                     controller: _address1Controller,
-                    style: AppStyle.txtInterRegular22,
+                    style: AppStyle.gfABeeZeeRegularBlack(fontSize: 21),
                     decoration: InputDecoration(
                       label: Text(
                         'Address 1',
-                        style: AppStyle.txtPoppinsMedium20,
+                        style: AppStyle.gfABeeZeeMediumBlack(fontSize: 20),
                       ),
                       filled: true,
                       fillColor: ColorConstant.gray100,
@@ -187,11 +219,11 @@ class _ProfileAddAddressScreenState extends State<ProfileAddAddressScreen> {
                   height: 50,
                   child: TextField(
                     controller: _address2Controller,
-                    style: AppStyle.txtInterRegular22,
+                    style: AppStyle.gfABeeZeeRegularBlack(fontSize: 21),
                     decoration: InputDecoration(
                       label: Text(
                         'Address 2 (Optional)',
-                        style: AppStyle.txtPoppinsMedium20,
+                        style: AppStyle.gfABeeZeeMediumBlack(fontSize: 20),
                       ),
                       filled: true,
                       fillColor: ColorConstant.gray100,
@@ -223,11 +255,11 @@ class _ProfileAddAddressScreenState extends State<ProfileAddAddressScreen> {
                   height: 50,
                   child: TextField(
                     controller: _cityController,
-                    style: AppStyle.txtInterRegular22,
+                    style: AppStyle.gfABeeZeeRegularBlack(fontSize: 21),
                     decoration: InputDecoration(
                       label: Text(
                         'City',
-                        style: AppStyle.txtPoppinsMedium20,
+                        style: AppStyle.gfABeeZeeMediumBlack(fontSize: 20),
                       ),
                       filled: true,
                       fillColor: ColorConstant.gray100,
@@ -259,11 +291,11 @@ class _ProfileAddAddressScreenState extends State<ProfileAddAddressScreen> {
                   height: 50,
                   child: TextField(
                     controller: _provinceController,
-                    style: AppStyle.txtInterRegular22,
+                    style: AppStyle.gfABeeZeeRegularBlack(fontSize: 21),
                     decoration: InputDecoration(
                       label: Text(
                         'Province',
-                        style: AppStyle.txtPoppinsMedium20,
+                        style: AppStyle.gfABeeZeeMediumBlack(fontSize: 20),
                       ),
                       filled: true,
                       fillColor: ColorConstant.gray100,
@@ -295,11 +327,11 @@ class _ProfileAddAddressScreenState extends State<ProfileAddAddressScreen> {
                   height: 50,
                   child: TextField(
                     controller: _countryController,
-                    style: AppStyle.txtInterRegular22,
+                    style: AppStyle.gfABeeZeeRegularBlack(fontSize: 21),
                     decoration: InputDecoration(
                       label: Text(
                         'Country',
-                        style: AppStyle.txtPoppinsMedium20,
+                        style: AppStyle.gfABeeZeeMediumBlack(fontSize: 20),
                       ),
                       filled: true,
                       fillColor: ColorConstant.gray100,
@@ -331,11 +363,11 @@ class _ProfileAddAddressScreenState extends State<ProfileAddAddressScreen> {
                   height: 50,
                   child: TextField(
                     controller: _zipController,
-                    style: AppStyle.txtInterRegular22,
+                    style: AppStyle.gfABeeZeeRegularBlack(fontSize: 21),
                     decoration: InputDecoration(
                       label: Text(
                         'Zip Code',
-                        style: AppStyle.txtPoppinsMedium20,
+                        style: AppStyle.gfABeeZeeMediumBlack(fontSize: 20),
                       ),
                       filled: true,
                       fillColor: ColorConstant.gray100,
@@ -367,11 +399,11 @@ class _ProfileAddAddressScreenState extends State<ProfileAddAddressScreen> {
                   height: 50,
                   child: TextField(
                     controller: _phoneController,
-                    style: AppStyle.txtInterRegular22,
+                    style: AppStyle.gfABeeZeeRegularBlack(fontSize: 21),
                     decoration: InputDecoration(
                       label: Text(
                         'Phone Number',
-                        style: AppStyle.txtPoppinsMedium20,
+                        style: AppStyle.gfABeeZeeMediumBlack(fontSize: 20),
                       ),
                       filled: true,
                       fillColor: ColorConstant.gray100,
@@ -418,33 +450,86 @@ class _ProfileAddAddressScreenState extends State<ProfileAddAddressScreen> {
                         String country = _countryController.text;
                         String zip = _zipController.text;
                         String phone = _phoneController.text;
-                        String accessToken = loginController.userAccessToken.value.toString();
+                        String accessToken =
+                            loginController.userAccessToken.value.toString();
+                        String addressId = widget.address?.id.toString() ?? '';
 
+                        if (widget.addressType == AddressType.newAddress) {
+                          address = await customerController
+                              .addCustomerAddress(
+                                  firstName: firstName,
+                                  lastName: lastName,
+                                  address1: address1,
+                                  address2: address2,
+                                  city: city,
+                                  country: country,
+                                  province: province,
+                                  zip: zip,
+                                  phone: phone,
+                                  customerAccessToken: accessToken)
+                              .then((value) {
+                            showDoneDialog(
+                                "You have successfully added your address.");
+                            try{
+                              loginController.addressList.value.add(value);
 
-                        await customerController.addCustomerAddress(
-                            firstName: firstName,
-                            lastName: lastName,
-                            address1: address1,
-                            address2: address2,
-                            city: city,
-                            country: country,
-                            province: province,
-                            zip: zip,
-                            phone: phone,
-                            customerAccessToken: accessToken
-                        ).then((value) {
-                          showDoneDialog();
-                          Future.delayed(const Duration(seconds: 2));
-                          Get.offNamed('/profileScreen');
-                        }).onError((error, stackTrace) {
-                          debugPrint("Error : ${error.toString()}:");
-                          showErrorMessage(error.toString());
-                        });
+                              // loginController.checkUser();
+                            }catch(e){
+                              debugPrint('------>$e');
+                            }
+                          }).onError((error, stackTrace) {
+                            debugPrint("Error : ${error.toString()}:");
+                            showErrorMessage(error.toString());
+                          });
+                        } else if (widget.addressType ==
+                            AddressType.editAddress) {
+                          await customerController
+                              .updateCustomerAddress(
+                                  addressId: addressId,
+                                  firstName: firstName,
+                                  lastName: lastName,
+                                  address1: address1,
+                                  address2: address2,
+                                  city: city,
+                                  country: country,
+                                  province: province,
+                                  zip: zip,
+                                  phone: phone,
+                                  userToken: accessToken)
+                              .then((value) {
+                            // await loginController.checkUser();
+                            // loginController.update();
+                            // loginController.currentUser.value?.address
+                            //         ?.addressList[addressIndex] ==
+                            //     Address(
+                            //         firstName: firstName,
+                            //         lastName: lastName,
+                            //         address1: address1,
+                            //         address2: address2,
+                            //         city: city,
+                            //         country: country,
+                            //         province: province,
+                            //         zip: zip,
+                            //         phone: phone);
+                            showDoneDialog(
+                                "You have successfully updated your address.");
+                          }).onError((error, stackTrace) {
+                            debugPrint("Error : ${error.toString()}:");
+                            showErrorMessage(error.toString());
+                          });
+                        }
                       },
-                      child: Text(
-                        'Add Address',
-                        style: AppStyle.txtPlayfairDisplayMedium26,
-                      )),
+                      child: widget.addressType == AddressType.newAddress
+                          ? Text(
+                              'Add Address',
+                              style:
+                                  AppStyle.gfABeeZeeMediumWhite(fontSize: 26),
+                            )
+                          : Text(
+                              'Update',
+                              style:
+                                  AppStyle.gfABeeZeeMediumWhite(fontSize: 26),
+                            )),
                 ),
               )
             ],
@@ -454,18 +539,18 @@ class _ProfileAddAddressScreenState extends State<ProfileAddAddressScreen> {
     );
   }
 
-  void showDoneDialog() {
+  void showDoneDialog(String content) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text("Congratulations!"),
-          content: const Text("You have successfully added your address."),
+          content: Text(content),
           actions: [
             TextButton(
               child: const Text("OK"),
               onPressed: () {
-                Navigator.of(context).pop();
+                Get.offNamed('/profileScreen');
               },
             ),
           ],

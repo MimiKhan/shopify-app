@@ -83,7 +83,7 @@ mutation MyMutation($firstName: String, $lastName: String, $email: String!, $pas
                 }
                 title
                 image {
-                  altText
+                  url
                   id
                   originalSrc
                 }

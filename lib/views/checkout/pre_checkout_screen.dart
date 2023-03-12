@@ -3,25 +3,22 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:lime_light_copy_shopify_store/controllers/cart_controller.dart';
 import 'package:lime_light_copy_shopify_store/controllers/checkout_controller.dart';
+import 'package:lime_light_copy_shopify_store/controllers/login_controller.dart';
 import 'package:lime_light_copy_shopify_store/services/network.dart';
 import 'package:lime_light_copy_shopify_store/shopify_models/models/src/shopify_user/address/address.dart';
 import 'package:lime_light_copy_shopify_store/models/cart_model.dart';
+import 'package:lime_light_copy_shopify_store/theme/app_style.dart';
 import 'package:lime_light_copy_shopify_store/views/cart/cart_ui/cart_screen.dart';
+import 'package:lime_light_copy_shopify_store/views/cart/cart_ui/cart_screen2.0.dart';
 import 'package:lime_light_copy_shopify_store/views/checkout/checkout_screen.dart';
 
-
-enum PreCheckoutUserType {
-  user,
-  guest
-}
-
+enum PreCheckoutUserType { user, guest }
 
 class PreCheckoutScreen extends StatefulWidget {
-  const PreCheckoutScreen({Key? key, required this.cartModelItems, required this.userType})
+  const PreCheckoutScreen({Key? key, required this.cartModelItems})
       : super(key: key);
 
   final List<CartModel> cartModelItems;
-  final PreCheckoutUserType userType;
 
   @override
   State<PreCheckoutScreen> createState() => _PreCheckoutScreenState();
@@ -30,27 +27,30 @@ class PreCheckoutScreen extends StatefulWidget {
 class _PreCheckoutScreenState extends State<PreCheckoutScreen> {
   final checkoutController = Get.find<CheckoutController>();
   final cartController = Get.find<CartController>();
+  final loginController = Get.find<LoginController>();
 
-  String _firstName = 'Haider',
-      _lastName = 'Khan',
-      _address = 'Flat 4 103 Huddleston road',
-      _city = 'London',
-      _province = 'London',
-      _country = 'United Kingdom',
-      _zip = 'N70EH',
-      _phone = '+447576298713';
+  // String _firstName = 'Haider',
+  //     _lastName = 'Khan',
+  //     _address = 'Flat 4 103 Huddleston road',
+  //     _city = 'London',
+  //     _province = 'London',
+  //     _country = 'United Kingdom',
+  //     _zip = 'N70EH',
+  //     _phone = '+447576298713';
+  //
+  // String _dialCode = '+44 ';
+  //
+  // final _firstNameController = TextEditingController(text: "Haider");
+  // final _lastNameController = TextEditingController(text: "Khan");
+  // final _addressController =
+  //     TextEditingController(text: "Flat 4 103 Huddleston road");
+  // final _cityController = TextEditingController(text: "London");
+  // final _provinceController = TextEditingController(text: "London");
+  // final _zipController = TextEditingController(text: "N70EH");
+  // final _countryController = TextEditingController(text: "United Kingdom");
+  // final _phoneController = TextEditingController(text: "7576298713");
 
-  String _dialCode = '+44 ';
-
-  final _firstNameController = TextEditingController(text: "Haider");
-  final _lastNameController = TextEditingController(text: "Khan");
-  final _addressController = TextEditingController(text: "Flat 4 103 Huddleston road");
-  final _cityController = TextEditingController(text: "London");
-  final _provinceController = TextEditingController(text: "London");
-  final _zipController = TextEditingController(text: "N70EH");
-  final _countryController =
-      TextEditingController(text: "United Kingdom");
-  final _phoneController = TextEditingController(text: "7576298713");
+  int _selectedIndex = -1;
 
   @override
   void initState() {
@@ -66,12 +66,15 @@ class _PreCheckoutScreenState extends State<PreCheckoutScreen> {
         elevation: 0,
         backgroundColor: Colors.transparent,
         leading: GestureDetector(
-          onTap: () => Get.off(() => CartScreen()),
+          onTap: () => Get.off(() => CartScreen2()),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: const [
-              Icon(CupertinoIcons.arrowtriangle_left_fill),
+              Icon(
+                CupertinoIcons.arrowtriangle_left_fill,
+                color: Colors.black,
+              ),
               Text('Cart'),
             ],
           ),
@@ -79,68 +82,138 @@ class _PreCheckoutScreenState extends State<PreCheckoutScreen> {
         actions: [
           GestureDetector(
             onTap: () async {
-              debugPrint("""
-                            firstName: ${_firstNameController.text},$_firstName,
-                                lastName: ${_lastNameController.text},
-                                address1: ${_addressController.text},
-                                city: ${_cityController.text},
-                                country: $_country,
-                                zip: ${_zipController.text},
-                                phone: $_phone
-                                """);
+              // debugPrint("""
+              //               firstName: ${_firstNameController.text},$_firstName,
+              //                   lastName: ${_lastNameController.text},
+              //                   address1: ${_addressController.text},
+              //                   city: ${_cityController.text},
+              //                   country: $_country,
+              //                   zip: ${_zipController.text},
+              //                   phone: $_phone
+              //                   """);
               var lineItems = await cartController
-                  .getLineItems(cartController.cartModelItemsSelected.value);
-              // var position = await Network().getCoordinatesFromAddress("$_address,$_city,$_country,$_zip");
-              // debugPrint('${position.latitude} , ${position.longitude}');
-              var address = Address(
-                  name: "Mimi Khan",
-                  firstName: _firstName,
-                  lastName: _lastName,
-                  address1: _address,
-                  countryCode: "GB",
-                  city: _city,
-                  province: _province,
-                  country: _country,
-                  zip: _zip,
-                  phone: _phone
-              );
+                  .getLineItems(cartController.cartModelItems.value);
+              var address1 = loginController.addressList.value[_selectedIndex];
               await checkoutController
-                  .createCheckoutFromCart(lineItems, address)
-                  .then((v) {
-                    // return checkoutController.updateData(checkoutController.checkout);
-                    return Get.to(() => const CheckoutScreen());
-
-                  });
+                  .createCheckoutFromCart(lineItems, address1)
+                  .whenComplete(() {
+                Get.toNamed('/checkoutScreen');
+              }).onError((error, stackTrace) {
+                debugPrint('------* In Checkout*--- > $error   <----*');
+                debugPrintStack(stackTrace: stackTrace);
+              });
             },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: const [
                 Text('Proceed'),
-                Icon(CupertinoIcons.arrowtriangle_right_fill),
+                Icon(
+                  CupertinoIcons.arrowtriangle_right_fill,
+                  color: Colors.black,
+                ),
               ],
             ),
           ),
         ],
       ),
+      extendBodyBehindAppBar: false,
       body: SafeArea(
         child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          physics: AlwaysScrollableScrollPhysics(),
           child: Column(
             children: [
               const SizedBox(
                 height: 20,
               ),
-
-              const Center(
+              Center(
                   child: Text(
                 'Customer Information',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                style: AppStyle.gfABeeZeeBoldBlack(fontSize: 24),
               )),
-
               const SizedBox(
                 height: 20,
               ),
               SizedBox(
+                // height: 350,
+                child: ListView.builder(
+                  itemCount: loginController.addressList.length,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  scrollDirection: Axis.vertical,
+                  itemBuilder: (BuildContext context, int index) {
+                    Address address = loginController.addressList[index];
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10.0, vertical: 10),
+                      child: Container(
+                        height: 110,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.rectangle,
+                          borderRadius: BorderRadius.circular(15),
+                          // color: Colors.grey.shade200,
+                        ),
+                        child: RadioListTile(
+                          tileColor: Colors.grey.shade200,
+                          title: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                '${address.firstName} '
+                                '${address.lastName}',
+                                style:
+                                    AppStyle.gfABeeZeeMediumBlack(fontSize: 15),
+                              ),
+                              address.address2 != null
+                                  ? Text(
+                                      '${address.address1},'
+                                      ' ${address.city},'
+                                      ' ${address.province},'
+                                      ' ${address.country},'
+                                      ' ${address.zip}.',
+                                      style: AppStyle.gfABeeZeeMediumBlack(
+                                          fontSize: 13),
+                                      softWrap: true,
+                                    )
+                                  : Text(
+                                      '${address.address1},'
+                                      ' ${address.address2},'
+                                      ' ${address.city},'
+                                      ' ${address.province},'
+                                      ' ${address.country},'
+                                      ' ${address.zip}.',
+                                      style: AppStyle.gfABeeZeeMediumBlack(
+                                          fontSize: 13),
+                                      softWrap: true,
+                                    ),
+                              Text(
+                                '${address.phone}',
+                                style:
+                                    AppStyle.gfABeeZeeMediumBlack(fontSize: 14),
+                              ),
+                            ],
+                          ),
+                          selectedTileColor: Colors.blueGrey.shade600,
+                          value: index,
+                          groupValue: _selectedIndex,
+                          onChanged: (int? value) {
+                            setState(() {
+                              _selectedIndex = value!;
+                              debugPrint(
+                                  "Selected Address : ${loginController.addressList.value[_selectedIndex]}");
+                            });
+                          },
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+
+/*
+        SizedBox(
                 width: 380,
                 height: 45,
                 child: GetX<CartController>(builder: (nestedCartController) {
@@ -405,69 +478,7 @@ class _PreCheckoutScreenState extends State<PreCheckoutScreen> {
               const SizedBox(
                 height: 20,
               ),
-              /*Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    GestureDetector(
-                      onTap: () => Get.off(() => CartScreen()),
-                      child: Row(
-                        children: const [
-                          Icon(Icons.arrow_back_ios_new_outlined),
-                          Text('Back to Cart'),
-                        ],
-                      ),
-                    ),
-                    ElevatedButton(
-                      onPressed: () async {
-                        debugPrint("""
-                            firstName: ${_firstNameController.text},$_firstName,
-                                lastName: ${_lastNameController.text},
-                                address1: ${_addressController.text},
-                                city: ${_cityController.text},
-                                country: $_country,
-                                zip: ${_zipController.text},
-                                phone: $_phone
-                                """);
-                        var lineItems = await cartController.getLineItems(
-                            cartController.cartModelItemsSelected.value);
-                        var address = Address(
-                            name: "Mimi Khan",
-                            firstName: _firstName,
-                            lastName: _lastName,
-                            address1: _address,
-                            countryCode: "AE",
-                            address2: "nadkjfbasdjfbjads",
-                            formattedArea: "abdsjhabd",
-                            company: "Self",
-                            id: "sandk",
-                            city: _city,
-                            province: _province,
-                            country: _country,
-                            zip: _zip,
-                            phone: _phone);
-                        await checkoutController
-                            .createCheckoutFromCart(lineItems, address)
-                            .then((v) => Get.to(() => const CheckoutScreen()));
-                      },
-                      style: ElevatedButton.styleFrom(
-                          alignment: Alignment.center,
-                          backgroundColor: Colors.black,
-                          elevation: 10,
-                          fixedSize: const Size(150, 40)),
-                      child: const Text(
-                        'Proceed',
-                        style: TextStyle(
-                          fontSize: 23,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),*/
+             */
             ],
           ),
         ),
@@ -475,3 +486,8 @@ class _PreCheckoutScreenState extends State<PreCheckoutScreen> {
     );
   }
 }
+
+// extension Padding on num {
+//   SizedBox get ph => SizedBox(height:toDouble() ,);
+//   SizedBox get pw => SizedBox(width:toDouble() ,);
+// }

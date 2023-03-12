@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:lime_light_copy_shopify_store/models/country_data_model.dart';
 import 'package:lime_light_copy_shopify_store/shopify_models/flutter_simple_shopify.dart';
+import 'package:lime_light_copy_shopify_store/shopify_models/models/src/cart/cart_line/cart_line.dart';
 import 'package:lime_light_copy_shopify_store/shopify_models/models/src/order/discount_allocations/discount_allocations.dart';
 import 'package:lime_light_copy_shopify_store/shopify_models/models/src/product/price_v_2/price_v_2.dart';
 import 'package:lime_light_copy_shopify_store/models/cart_model.dart';
@@ -13,6 +14,7 @@ class CartController extends GetxController {
   var cartModelItemsSelected = <CartModel>[].obs;
 
   var lineItemsFromCart = <LineItem>[].obs;
+  var linesFromCart = <CartLine>[].obs;
 
   int get cartModelItemsCount => cartModelItems.length;
 
@@ -27,7 +29,7 @@ class CartController extends GetxController {
   Future<List<CountryDataModel>> getCountryData() async {
     await Future.delayed(const Duration(seconds: 1));
     final jsonData =
-        await rootBundle.loadString('assets/json/country_data.json');
+    await rootBundle.loadString('assets/json/country_data.json');
     final jsonList = jsonDecode(jsonData) as List<dynamic>;
 
     return jsonList.map((e) => CountryDataModel.fromJson(e)).toList();
@@ -51,6 +53,17 @@ class CartController extends GetxController {
     return lineItemsFromCart.value;
   }
 
+  Future<List<CartLine>> getCartLines(
+      List<CartModel> cartModelItemsList) async {
+    for (var cartModelItem in cartModelItems) {
+      linesFromCart.add(CartLine(merchandise: cartModelItem.productVariant,
+          quantity: cartModelItem.quantity));
+    }
+    update();
+    return linesFromCart.value;
+  }
+
+
   void addItem(CartModel item) {
     if (cartModelItems.any((i) {
       return i.product.id == item.product.id &&
@@ -62,6 +75,7 @@ class CartController extends GetxController {
       cartModelItems.add(item);
     }
   }
+
 
   void updateQuantity(CartModel item, int newQuantity) {
     int index = cartModelItems.indexOf(item);
@@ -97,13 +111,13 @@ class CartController extends GetxController {
     return cost;
   }
 
-  double get totalCostSelectedItem {
-    double cost = 0;
-    for (var item in cartModelItemsSelected) {
-      cost += item.productVariant.price.amount * item.quantity;
-    }
-    return cost;
-  }
+// double get totalCostSelectedItem {
+//   double cost = 0;
+//   for (var item in cartModelItemsSelected) {
+//     cost += item.productVariant.price.amount * item.quantity;
+//   }
+//   return cost;
+// }
 
 /*final Map<Product, int> _cartItems = <Product, int>{}.obs;
   Map<Product, int> get cartItems => _cartItems;

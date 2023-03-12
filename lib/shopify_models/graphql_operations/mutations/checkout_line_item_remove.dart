@@ -71,7 +71,7 @@ mutation checkoutLineItemsRemove($lineItemIds: [ID!]!, $checkoutId: ID!) {
               }
               title
               image {
-                altText
+                url
                 originalSrc
                 id
               }

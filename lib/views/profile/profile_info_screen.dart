@@ -27,9 +27,11 @@ class _ProfileInfoScreenState extends State<ProfileInfoScreen> {
     await Future.delayed(
       const Duration(seconds: 2),
       () {
-        setState(() {
-          _shimmerEnable = false;
-        });
+        if(mounted){
+          setState(() {
+            _shimmerEnable = false;
+          });
+        }
       },
     );
   }

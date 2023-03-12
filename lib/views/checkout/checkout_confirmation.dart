@@ -17,7 +17,7 @@ class CheckoutConfirmation extends StatelessWidget {
             children: [
               GetX<CheckoutController>(
                 builder: (controller) {
-                  return Text(checkoutController.paymentDataCC.value);
+                  return Text(checkoutController.paymentDataCreditCard.value);
                 }
               ),
             ],

@@ -8,7 +8,7 @@ import 'package:lime_light_copy_shopify_store/shopify_models/shopify/src/shopify
 class HomeController extends GetxController {
   var bestSellingProducts = <Product>[].obs;
   var collections = <Collection>[].obs;
-  Rx<Shop?> currentShop = Rx<Shop?>(null);
+  // Rx<Shop?> currentShop = Rx<Shop?>(null);
 
   int get productsCount => bestSellingProducts.length;
   int get collectionsCount => collections.length;
@@ -17,7 +17,6 @@ class HomeController extends GetxController {
   void onInit() {
     super.onInit();
     initData();
-    getShopData();
   }
 
 
@@ -53,9 +52,9 @@ class HomeController extends GetxController {
     }
   }
 
-  void getShopData() async{
-    ShopifyStore shopifyStore = ShopifyStore.instance;
-    final shopData = await shopifyStore.getShop();
-    currentShop.value = shopData;
-  }
+  // void getShopData() async{
+  //   ShopifyStore shopifyStore = ShopifyStore.instance;
+  //   final shopData = await shopifyStore.getShop();
+  //   currentShop.value = shopData;
+  // }
 }

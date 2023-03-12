@@ -11,7 +11,7 @@ _$_AppliedGiftCards _$$_AppliedGiftCardsFromJson(Map<String, dynamic> json) =>
       amountUsedV2:
           PriceV2.fromJson(json['amountUsedV2'] as Map<String, dynamic>),
       balanceV2: PriceV2.fromJson(json['balanceV2'] as Map<String, dynamic>),
-      id: json['id'] as String,
+      id: json['id'] as String?,
     );
 
 Map<String, dynamic> _$$_AppliedGiftCardsToJson(_$_AppliedGiftCards instance) =>

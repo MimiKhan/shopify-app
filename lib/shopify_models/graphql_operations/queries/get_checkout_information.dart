@@ -82,7 +82,7 @@ query($id: ID!){
               }
               title
               image {
-                altText
+                url
                 originalSrc
                 id
               }

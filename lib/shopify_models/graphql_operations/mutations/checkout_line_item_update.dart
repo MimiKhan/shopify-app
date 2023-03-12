@@ -71,7 +71,7 @@ mutation checkoutLineItemsUpdate($lineItems: [CheckoutLineItemInput!]!, $checkou
               }
               title
               image {
-                altText
+                url
                 originalSrc
                 id
               }

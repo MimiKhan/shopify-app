@@ -35,7 +35,7 @@ customer(customerAccessToken: $accessToken) {
                   }
                   title
                   image {
-                    altText
+                    url
                     id
                     originalSrc
                   }

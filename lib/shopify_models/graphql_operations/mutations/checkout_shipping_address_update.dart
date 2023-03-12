@@ -71,7 +71,7 @@ mutation checkoutShippingAddressUpdate($checkoutId : ID!, $address1 : String, $a
               }
               title
               image {
-                altText
+                url
                 originalSrc
                 id
               }

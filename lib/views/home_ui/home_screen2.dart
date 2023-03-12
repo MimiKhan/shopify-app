@@ -79,7 +79,7 @@ class _HomeScreen2State extends State<HomeScreen2> {
     // TODO: implement initState
     super.initState();
     waitForShimmerEffect();
-    _shopDataAvailable = homeController.currentShop.value?.name != null;
+    // _shopDataAvailable = homeController.currentShop.value?.name != null;
   }
 
   Future<void> waitForShimmerEffect() async {
@@ -101,12 +101,12 @@ class _HomeScreen2State extends State<HomeScreen2> {
       onWillPop: () => showExitPopup(context),
       child: Scaffold(
         appBar: AppBar(
-          title: GetX<HomeController>(builder: (controller) {
-            return Text(
-              controller.currentShop.value?.name ?? '',
-              style: AppStyle.gfABeeZeeBoldBlack(fontSize: 26),
-            );
-          }),
+          // title: GetX<HomeController>(builder: (controller) {
+          //   return Text(
+          //     controller.currentShop.value?.name ?? '',
+          //     style: AppStyle.gfABeeZeeBoldBlack(fontSize: 26),
+          //   );
+          // }),
           backgroundColor: Colors.transparent,
           leading: IconButton(
               onPressed: () {},
@@ -634,7 +634,7 @@ class _HomeScreen2State extends State<HomeScreen2> {
                                           return Padding(
                                             padding: const EdgeInsets.symmetric(
                                                 horizontal: 15.0, vertical: 10),
-                                            child: Container(
+                                            child: SizedBox(
                                               width: size.width - 21,
                                               height: 200,
                                               child: Stack(

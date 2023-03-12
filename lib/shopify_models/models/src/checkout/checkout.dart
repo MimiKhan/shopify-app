@@ -20,7 +20,7 @@ class Checkout with _$Checkout {
   factory Checkout({
     required String id,
     required bool ready,
-    required AvailableShippingRates? availableShippingRates,
+    AvailableShippingRates? availableShippingRates,
     required String createdAt,
     required String currencyCode,
     required PriceV2 totalTaxV2,
@@ -29,8 +29,8 @@ class Checkout with _$Checkout {
     required bool taxExempt,
     required PriceV2 subtotalPriceV2,
     required bool requiresShipping,
-    required List<AppliedGiftCards> appliedGiftCards,
     @JsonKey(fromJson: JsonHelper.lineItems) required List<LineItem> lineItems,
+    List<AppliedGiftCards>? appliedGiftCards,
     Order? order,
     String? orderStatusUrl,
     String? shopifyPaymentsAccountId,
@@ -43,6 +43,5 @@ class Checkout with _$Checkout {
     String? updatedAt,
   }) = _Checkout;
 
-  factory Checkout.fromJson(Map<String, dynamic> json) =>
-      _$CheckoutFromJson(json);
+  factory Checkout.fromJson(Map<String, dynamic> json) => _$CheckoutFromJson(json);
 }

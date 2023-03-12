@@ -463,27 +463,19 @@ class _CartScreen2State extends State<CartScreen2> {
                             if (userLoggedIn) {
                               Get.to(() => PreCheckoutScreen(
                                   cartModelItems:
-                                      cartController.cartModelItems.value,userType: PreCheckoutUserType.user,),);
+                                      cartController.cartModelItems.value),);
                             } else {
                               showDialog(
                                   context: context,
-                                  builder: (context) {
+                                  builder: (_) {
                                     return AlertDialog(
-                                      title: const Text('Warning'),
+                                      title: const Text('Action Needed'),
                                       content: const Text(
-                                          'Do you want to sign in or continue as guest'),
+                                          'Please sign in to complete checkout. Thank you!'),
                                       actions: [
                                         TextButton(
                                           onPressed: () {
-                                            Get.to(() => PreCheckoutScreen(
-                                              cartModelItems:
-                                              cartController.cartModelItems.value,userType: PreCheckoutUserType.guest,),);
-                                          },
-                                          child: const Text('Guest Checkout'),
-                                        ),
-                                        TextButton(
-                                          onPressed: () {
-                                            Get.to(() => LoginPage(
+                                            Get.to(() => const LoginPage(
                                                 loginRoute: LoginRoute.cartScreen));
                                           },
                                           child: const Text('Login'),

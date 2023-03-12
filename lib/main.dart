@@ -11,6 +11,7 @@ import 'package:lime_light_copy_shopify_store/shopify_models/models/src/shopify_
 import 'package:lime_light_copy_shopify_store/shopify_models/shopify_config.dart';
 import 'package:lime_light_copy_shopify_store/views/cart/cart_ui/cart_screen2.0.dart';
 import 'package:lime_light_copy_shopify_store/views/categories/collections_screen.dart';
+import 'package:lime_light_copy_shopify_store/views/checkout/checkout_screen.dart';
 import 'package:lime_light_copy_shopify_store/views/home_ui/home_screen.dart';
 import 'package:lime_light_copy_shopify_store/views/home_ui/home_screen2.dart';
 import 'package:lime_light_copy_shopify_store/views/login/pages/register_page.dart';
@@ -128,6 +129,7 @@ class _MyAppState extends State<MyApp> {
         page: () => ProfileAddAddressScreen(
             address: Address(), addressType: AddressType.newAddress)),
     GetPage(name: '/profileScreen', page: () => const ProfileScreen()),
+    GetPage(name: '/checkoutScreen', page: () => const CheckoutScreen()),
 
     // GetPage(name: '/productDetailsScreen', page: () => const ProductDetailScreen(productID: "7356346499269")),
   ];

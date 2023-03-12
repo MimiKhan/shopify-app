@@ -8,9 +8,11 @@ part of 'shipping_rates.dart';
 
 _$_ShippingRates _$$_ShippingRatesFromJson(Map<String, dynamic> json) =>
     _$_ShippingRates(
-      handle: json['handle'] as String,
-      title: json['title'] as String,
-      priceV2: PriceV2.fromJson(json['priceV2'] as Map<String, dynamic>),
+      handle: json['handle'] as String?,
+      title: json['title'] as String?,
+      priceV2: json['priceV2'] == null
+          ? null
+          : PriceV2.fromJson(json['priceV2'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$_ShippingRatesToJson(_$_ShippingRates instance) =>

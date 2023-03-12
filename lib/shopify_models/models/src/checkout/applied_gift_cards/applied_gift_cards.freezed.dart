@@ -22,7 +22,7 @@ AppliedGiftCards _$AppliedGiftCardsFromJson(Map<String, dynamic> json) {
 mixin _$AppliedGiftCards {
   PriceV2 get amountUsedV2 => throw _privateConstructorUsedError;
   PriceV2 get balanceV2 => throw _privateConstructorUsedError;
-  String get id => throw _privateConstructorUsedError;
+  String? get id => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -36,7 +36,7 @@ abstract class $AppliedGiftCardsCopyWith<$Res> {
           AppliedGiftCards value, $Res Function(AppliedGiftCards) then) =
       _$AppliedGiftCardsCopyWithImpl<$Res, AppliedGiftCards>;
   @useResult
-  $Res call({PriceV2 amountUsedV2, PriceV2 balanceV2, String id});
+  $Res call({PriceV2 amountUsedV2, PriceV2 balanceV2, String? id});
 
   $PriceV2CopyWith<$Res> get amountUsedV2;
   $PriceV2CopyWith<$Res> get balanceV2;
@@ -57,7 +57,7 @@ class _$AppliedGiftCardsCopyWithImpl<$Res, $Val extends AppliedGiftCards>
   $Res call({
     Object? amountUsedV2 = null,
     Object? balanceV2 = null,
-    Object? id = null,
+    Object? id = freezed,
   }) {
     return _then(_value.copyWith(
       amountUsedV2: null == amountUsedV2
@@ -68,10 +68,10 @@ class _$AppliedGiftCardsCopyWithImpl<$Res, $Val extends AppliedGiftCards>
           ? _value.balanceV2
           : balanceV2 // ignore: cast_nullable_to_non_nullable
               as PriceV2,
-      id: null == id
+      id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ) as $Val);
   }
 
@@ -100,7 +100,7 @@ abstract class _$$_AppliedGiftCardsCopyWith<$Res>
       __$$_AppliedGiftCardsCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({PriceV2 amountUsedV2, PriceV2 balanceV2, String id});
+  $Res call({PriceV2 amountUsedV2, PriceV2 balanceV2, String? id});
 
   @override
   $PriceV2CopyWith<$Res> get amountUsedV2;
@@ -121,7 +121,7 @@ class __$$_AppliedGiftCardsCopyWithImpl<$Res>
   $Res call({
     Object? amountUsedV2 = null,
     Object? balanceV2 = null,
-    Object? id = null,
+    Object? id = freezed,
   }) {
     return _then(_$_AppliedGiftCards(
       amountUsedV2: null == amountUsedV2
@@ -132,10 +132,10 @@ class __$$_AppliedGiftCardsCopyWithImpl<$Res>
           ? _value.balanceV2
           : balanceV2 // ignore: cast_nullable_to_non_nullable
               as PriceV2,
-      id: null == id
+      id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ));
   }
 }
@@ -144,7 +144,7 @@ class __$$_AppliedGiftCardsCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_AppliedGiftCards extends _AppliedGiftCards {
   _$_AppliedGiftCards(
-      {required this.amountUsedV2, required this.balanceV2, required this.id})
+      {required this.amountUsedV2, required this.balanceV2, this.id})
       : super._();
 
   factory _$_AppliedGiftCards.fromJson(Map<String, dynamic> json) =>
@@ -155,7 +155,7 @@ class _$_AppliedGiftCards extends _AppliedGiftCards {
   @override
   final PriceV2 balanceV2;
   @override
-  final String id;
+  final String? id;
 
   @override
   String toString() {
@@ -196,7 +196,7 @@ abstract class _AppliedGiftCards extends AppliedGiftCards {
   factory _AppliedGiftCards(
       {required final PriceV2 amountUsedV2,
       required final PriceV2 balanceV2,
-      required final String id}) = _$_AppliedGiftCards;
+      final String? id}) = _$_AppliedGiftCards;
   _AppliedGiftCards._() : super._();
 
   factory _AppliedGiftCards.fromJson(Map<String, dynamic> json) =
@@ -207,7 +207,7 @@ abstract class _AppliedGiftCards extends AppliedGiftCards {
   @override
   PriceV2 get balanceV2;
   @override
-  String get id;
+  String? get id;
   @override
   @JsonKey(ignore: true)
   _$$_AppliedGiftCardsCopyWith<_$_AppliedGiftCards> get copyWith =>

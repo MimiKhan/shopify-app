@@ -11,8 +11,7 @@ class AppliedGiftCards with _$AppliedGiftCards {
   factory AppliedGiftCards(
       {required PriceV2 amountUsedV2,
       required PriceV2 balanceV2,
-      required String id}) = _AppliedGiftCards;
+      String? id}) = _AppliedGiftCards;
 
-  factory AppliedGiftCards.fromJson(Map<String, dynamic> json) =>
-      _$AppliedGiftCardsFromJson(json);
+  factory AppliedGiftCards.fromJson(Map<String, dynamic> json) => _$AppliedGiftCardsFromJson(json);
 }

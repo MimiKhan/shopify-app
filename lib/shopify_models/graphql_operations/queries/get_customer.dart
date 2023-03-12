@@ -83,7 +83,7 @@ query($customerAccessToken : String!){
                 }
                 title
                 image {
-                  altText
+                  url
                   id
                   originalSrc
                 }

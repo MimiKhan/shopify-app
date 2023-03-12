@@ -186,7 +186,7 @@ class _ProfileAddAddressScreenState extends State<ProfileAddAddressScreen> {
                     style: AppStyle.gfABeeZeeRegularBlack(fontSize: 21),
                     decoration: InputDecoration(
                       label: Text(
-                        'Address 1',
+                        'Address',
                         style: AppStyle.gfABeeZeeMediumBlack(fontSize: 20),
                       ),
                       filled: true,
@@ -222,7 +222,7 @@ class _ProfileAddAddressScreenState extends State<ProfileAddAddressScreen> {
                     style: AppStyle.gfABeeZeeRegularBlack(fontSize: 21),
                     decoration: InputDecoration(
                       label: Text(
-                        'Address 2 (Optional)',
+                        'Apartment, suite etc (Optional)',
                         style: AppStyle.gfABeeZeeMediumBlack(fontSize: 20),
                       ),
                       filled: true,
@@ -294,7 +294,7 @@ class _ProfileAddAddressScreenState extends State<ProfileAddAddressScreen> {
                     style: AppStyle.gfABeeZeeRegularBlack(fontSize: 21),
                     decoration: InputDecoration(
                       label: Text(
-                        'Province',
+                        'Province / State',
                         style: AppStyle.gfABeeZeeMediumBlack(fontSize: 20),
                       ),
                       filled: true,

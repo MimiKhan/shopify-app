@@ -37,7 +37,7 @@ query getBlogs($reverseBlogs: Boolean, $reverseArticles: Boolean, $sortKey: Blog
               handle
               id
               image {
-                altText
+                url
                 id
                 originalSrc
               }

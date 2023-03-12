@@ -9,7 +9,7 @@ part of 'shopify_image.dart';
 _$_ShopifyImage _$$_ShopifyImageFromJson(Map<String, dynamic> json) =>
     _$_ShopifyImage(
       originalSrc: json['originalSrc'] as String,
-      url: json['url'] as String,
+      url: json['url'] as String?,
       id: json['id'] as String,
     );
 

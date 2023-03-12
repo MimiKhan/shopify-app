@@ -20,9 +20,9 @@ ShippingRates _$ShippingRatesFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$ShippingRates {
-  String get handle => throw _privateConstructorUsedError;
-  String get title => throw _privateConstructorUsedError;
-  PriceV2 get priceV2 => throw _privateConstructorUsedError;
+  String? get handle => throw _privateConstructorUsedError;
+  String? get title => throw _privateConstructorUsedError;
+  PriceV2? get priceV2 => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -36,9 +36,9 @@ abstract class $ShippingRatesCopyWith<$Res> {
           ShippingRates value, $Res Function(ShippingRates) then) =
       _$ShippingRatesCopyWithImpl<$Res, ShippingRates>;
   @useResult
-  $Res call({String handle, String title, PriceV2 priceV2});
+  $Res call({String? handle, String? title, PriceV2? priceV2});
 
-  $PriceV2CopyWith<$Res> get priceV2;
+  $PriceV2CopyWith<$Res>? get priceV2;
 }
 
 /// @nodoc
@@ -54,30 +54,34 @@ class _$ShippingRatesCopyWithImpl<$Res, $Val extends ShippingRates>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? handle = null,
-    Object? title = null,
-    Object? priceV2 = null,
+    Object? handle = freezed,
+    Object? title = freezed,
+    Object? priceV2 = freezed,
   }) {
     return _then(_value.copyWith(
-      handle: null == handle
+      handle: freezed == handle
           ? _value.handle
           : handle // ignore: cast_nullable_to_non_nullable
-              as String,
-      title: null == title
+              as String?,
+      title: freezed == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
-              as String,
-      priceV2: null == priceV2
+              as String?,
+      priceV2: freezed == priceV2
           ? _value.priceV2
           : priceV2 // ignore: cast_nullable_to_non_nullable
-              as PriceV2,
+              as PriceV2?,
     ) as $Val);
   }
 
   @override
   @pragma('vm:prefer-inline')
-  $PriceV2CopyWith<$Res> get priceV2 {
-    return $PriceV2CopyWith<$Res>(_value.priceV2, (value) {
+  $PriceV2CopyWith<$Res>? get priceV2 {
+    if (_value.priceV2 == null) {
+      return null;
+    }
+
+    return $PriceV2CopyWith<$Res>(_value.priceV2!, (value) {
       return _then(_value.copyWith(priceV2: value) as $Val);
     });
   }
@@ -91,10 +95,10 @@ abstract class _$$_ShippingRatesCopyWith<$Res>
       __$$_ShippingRatesCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String handle, String title, PriceV2 priceV2});
+  $Res call({String? handle, String? title, PriceV2? priceV2});
 
   @override
-  $PriceV2CopyWith<$Res> get priceV2;
+  $PriceV2CopyWith<$Res>? get priceV2;
 }
 
 /// @nodoc
@@ -108,23 +112,23 @@ class __$$_ShippingRatesCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? handle = null,
-    Object? title = null,
-    Object? priceV2 = null,
+    Object? handle = freezed,
+    Object? title = freezed,
+    Object? priceV2 = freezed,
   }) {
     return _then(_$_ShippingRates(
-      handle: null == handle
+      handle: freezed == handle
           ? _value.handle
           : handle // ignore: cast_nullable_to_non_nullable
-              as String,
-      title: null == title
+              as String?,
+      title: freezed == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
-              as String,
-      priceV2: null == priceV2
+              as String?,
+      priceV2: freezed == priceV2
           ? _value.priceV2
           : priceV2 // ignore: cast_nullable_to_non_nullable
-              as PriceV2,
+              as PriceV2?,
     ));
   }
 }
@@ -132,19 +136,17 @@ class __$$_ShippingRatesCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_ShippingRates extends _ShippingRates {
-  _$_ShippingRates(
-      {required this.handle, required this.title, required this.priceV2})
-      : super._();
+  _$_ShippingRates({this.handle, this.title, this.priceV2}) : super._();
 
   factory _$_ShippingRates.fromJson(Map<String, dynamic> json) =>
       _$$_ShippingRatesFromJson(json);
 
   @override
-  final String handle;
+  final String? handle;
   @override
-  final String title;
+  final String? title;
   @override
-  final PriceV2 priceV2;
+  final PriceV2? priceV2;
 
   @override
   String toString() {
@@ -181,20 +183,20 @@ class _$_ShippingRates extends _ShippingRates {
 
 abstract class _ShippingRates extends ShippingRates {
   factory _ShippingRates(
-      {required final String handle,
-      required final String title,
-      required final PriceV2 priceV2}) = _$_ShippingRates;
+      {final String? handle,
+      final String? title,
+      final PriceV2? priceV2}) = _$_ShippingRates;
   _ShippingRates._() : super._();
 
   factory _ShippingRates.fromJson(Map<String, dynamic> json) =
       _$_ShippingRates.fromJson;
 
   @override
-  String get handle;
+  String? get handle;
   @override
-  String get title;
+  String? get title;
   @override
-  PriceV2 get priceV2;
+  PriceV2? get priceV2;
   @override
   @JsonKey(ignore: true)
   _$$_ShippingRatesCopyWith<_$_ShippingRates> get copyWith =>

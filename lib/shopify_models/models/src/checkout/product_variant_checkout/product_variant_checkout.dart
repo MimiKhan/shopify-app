@@ -12,11 +12,11 @@ class ProductVariantCheckout with _$ProductVariantCheckout {
 
   factory ProductVariantCheckout({
     required PriceV2 priceV2,
-    required String title,
+    String? title,
     required bool availableForSale,
-    required String sku,
+    String? sku,
     required bool requiresShipping,
-    required String id,
+    String? id,
     ShopifyImage? image,
     PriceV2? compareAtPrice,
     double? weight,

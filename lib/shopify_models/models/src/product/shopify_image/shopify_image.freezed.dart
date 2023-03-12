@@ -21,7 +21,7 @@ ShopifyImage _$ShopifyImageFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$ShopifyImage {
   String get originalSrc => throw _privateConstructorUsedError;
-  String get url => throw _privateConstructorUsedError;
+  String? get url => throw _privateConstructorUsedError;
   String get id => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -36,7 +36,7 @@ abstract class $ShopifyImageCopyWith<$Res> {
           ShopifyImage value, $Res Function(ShopifyImage) then) =
       _$ShopifyImageCopyWithImpl<$Res, ShopifyImage>;
   @useResult
-  $Res call({String originalSrc, String url, String id});
+  $Res call({String originalSrc, String? url, String id});
 }
 
 /// @nodoc
@@ -53,7 +53,7 @@ class _$ShopifyImageCopyWithImpl<$Res, $Val extends ShopifyImage>
   @override
   $Res call({
     Object? originalSrc = null,
-    Object? url = null,
+    Object? url = freezed,
     Object? id = null,
   }) {
     return _then(_value.copyWith(
@@ -61,10 +61,10 @@ class _$ShopifyImageCopyWithImpl<$Res, $Val extends ShopifyImage>
           ? _value.originalSrc
           : originalSrc // ignore: cast_nullable_to_non_nullable
               as String,
-      url: null == url
+      url: freezed == url
           ? _value.url
           : url // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -81,7 +81,7 @@ abstract class _$$_ShopifyImageCopyWith<$Res>
       __$$_ShopifyImageCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String originalSrc, String url, String id});
+  $Res call({String originalSrc, String? url, String id});
 }
 
 /// @nodoc
@@ -96,7 +96,7 @@ class __$$_ShopifyImageCopyWithImpl<$Res>
   @override
   $Res call({
     Object? originalSrc = null,
-    Object? url = null,
+    Object? url = freezed,
     Object? id = null,
   }) {
     return _then(_$_ShopifyImage(
@@ -104,10 +104,10 @@ class __$$_ShopifyImageCopyWithImpl<$Res>
           ? _value.originalSrc
           : originalSrc // ignore: cast_nullable_to_non_nullable
               as String,
-      url: null == url
+      url: freezed == url
           ? _value.url
           : url // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -119,8 +119,7 @@ class __$$_ShopifyImageCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_ShopifyImage extends _ShopifyImage {
-  _$_ShopifyImage(
-      {required this.originalSrc, required this.url, required this.id})
+  _$_ShopifyImage({required this.originalSrc, this.url, required this.id})
       : super._();
 
   factory _$_ShopifyImage.fromJson(Map<String, dynamic> json) =>
@@ -129,7 +128,7 @@ class _$_ShopifyImage extends _ShopifyImage {
   @override
   final String originalSrc;
   @override
-  final String url;
+  final String? url;
   @override
   final String id;
 
@@ -170,7 +169,7 @@ class _$_ShopifyImage extends _ShopifyImage {
 abstract class _ShopifyImage extends ShopifyImage {
   factory _ShopifyImage(
       {required final String originalSrc,
-      required final String url,
+      final String? url,
       required final String id}) = _$_ShopifyImage;
   _ShopifyImage._() : super._();
 
@@ -180,7 +179,7 @@ abstract class _ShopifyImage extends ShopifyImage {
   @override
   String get originalSrc;
   @override
-  String get url;
+  String? get url;
   @override
   String get id;
   @override

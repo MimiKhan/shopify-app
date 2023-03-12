@@ -81,7 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> waitForShimmerEffect() async {
     await Future.delayed(
-      const Duration(seconds: 1),
+      const Duration(seconds: 2),
       () {
         setState(() {
           _shimmerUpperEnable = false;

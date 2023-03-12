@@ -82,7 +82,7 @@ mutation checkoutShippingLineUpdate($checkoutId: ID!, $shippingRateHandle: Strin
               }
               title
               image {
-                altText
+                url
                 originalSrc
                 id
               }

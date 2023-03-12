@@ -31,7 +31,7 @@ query($handle : String!, $sortKey: ArticleSortKeys, $reverseArticles: Boolean){
           id
           handle
           image {
-            altText
+            url
             id
             originalSrc
           }

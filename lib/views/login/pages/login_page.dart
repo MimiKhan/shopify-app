@@ -64,7 +64,7 @@ class _LoginPageState extends State<LoginPage> {
         Fluttertoast.showToast(msg: "User signed in as : ${loginController.currentUser.value?.email}");
         debugPrint("User signed in as : ${loginController.currentUser.value?.email}");
         if(widget.loginRoute == LoginRoute.cartScreen){
-          Get.to(()=>PreCheckoutScreen(cartModelItems: cartController.cartModelItems,userType: PreCheckoutUserType.user,));
+          Get.to(()=>PreCheckoutScreen(cartModelItems: cartController.cartModelItems));
         }else if(widget.loginRoute == LoginRoute.settingsScreen){
           Fluttertoast.showToast(msg: "Routing to Settings");
           Get.to(() => MainScreen(selectedIndex: 4));

@@ -25,6 +25,5 @@ class MailingAddress with _$MailingAddress {
     String? provinceCode,
   }) = _MailingAddress;
 
-  factory MailingAddress.fromJson(Map<String, dynamic> json) =>
-      _$MailingAddressFromJson(json);
+  factory MailingAddress.fromJson(Map<String, dynamic> json) => _$MailingAddressFromJson(json);
 }

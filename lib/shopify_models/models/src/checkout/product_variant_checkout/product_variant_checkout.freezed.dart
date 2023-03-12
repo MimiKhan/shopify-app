@@ -22,11 +22,11 @@ ProductVariantCheckout _$ProductVariantCheckoutFromJson(
 /// @nodoc
 mixin _$ProductVariantCheckout {
   PriceV2 get priceV2 => throw _privateConstructorUsedError;
-  String get title => throw _privateConstructorUsedError;
+  String? get title => throw _privateConstructorUsedError;
   bool get availableForSale => throw _privateConstructorUsedError;
-  String get sku => throw _privateConstructorUsedError;
+  String? get sku => throw _privateConstructorUsedError;
   bool get requiresShipping => throw _privateConstructorUsedError;
-  String get id => throw _privateConstructorUsedError;
+  String? get id => throw _privateConstructorUsedError;
   ShopifyImage? get image => throw _privateConstructorUsedError;
   PriceV2? get compareAtPrice => throw _privateConstructorUsedError;
   double? get weight => throw _privateConstructorUsedError;
@@ -46,11 +46,11 @@ abstract class $ProductVariantCheckoutCopyWith<$Res> {
   @useResult
   $Res call(
       {PriceV2 priceV2,
-      String title,
+      String? title,
       bool availableForSale,
-      String sku,
+      String? sku,
       bool requiresShipping,
-      String id,
+      String? id,
       ShopifyImage? image,
       PriceV2? compareAtPrice,
       double? weight,
@@ -76,11 +76,11 @@ class _$ProductVariantCheckoutCopyWithImpl<$Res,
   @override
   $Res call({
     Object? priceV2 = null,
-    Object? title = null,
+    Object? title = freezed,
     Object? availableForSale = null,
-    Object? sku = null,
+    Object? sku = freezed,
     Object? requiresShipping = null,
-    Object? id = null,
+    Object? id = freezed,
     Object? image = freezed,
     Object? compareAtPrice = freezed,
     Object? weight = freezed,
@@ -91,26 +91,26 @@ class _$ProductVariantCheckoutCopyWithImpl<$Res,
           ? _value.priceV2
           : priceV2 // ignore: cast_nullable_to_non_nullable
               as PriceV2,
-      title: null == title
+      title: freezed == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       availableForSale: null == availableForSale
           ? _value.availableForSale
           : availableForSale // ignore: cast_nullable_to_non_nullable
               as bool,
-      sku: null == sku
+      sku: freezed == sku
           ? _value.sku
           : sku // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       requiresShipping: null == requiresShipping
           ? _value.requiresShipping
           : requiresShipping // ignore: cast_nullable_to_non_nullable
               as bool,
-      id: null == id
+      id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       image: freezed == image
           ? _value.image
           : image // ignore: cast_nullable_to_non_nullable
@@ -173,11 +173,11 @@ abstract class _$$_ProductVariantCheckoutCopyWith<$Res>
   @useResult
   $Res call(
       {PriceV2 priceV2,
-      String title,
+      String? title,
       bool availableForSale,
-      String sku,
+      String? sku,
       bool requiresShipping,
-      String id,
+      String? id,
       ShopifyImage? image,
       PriceV2? compareAtPrice,
       double? weight,
@@ -204,11 +204,11 @@ class __$$_ProductVariantCheckoutCopyWithImpl<$Res>
   @override
   $Res call({
     Object? priceV2 = null,
-    Object? title = null,
+    Object? title = freezed,
     Object? availableForSale = null,
-    Object? sku = null,
+    Object? sku = freezed,
     Object? requiresShipping = null,
-    Object? id = null,
+    Object? id = freezed,
     Object? image = freezed,
     Object? compareAtPrice = freezed,
     Object? weight = freezed,
@@ -219,26 +219,26 @@ class __$$_ProductVariantCheckoutCopyWithImpl<$Res>
           ? _value.priceV2
           : priceV2 // ignore: cast_nullable_to_non_nullable
               as PriceV2,
-      title: null == title
+      title: freezed == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       availableForSale: null == availableForSale
           ? _value.availableForSale
           : availableForSale // ignore: cast_nullable_to_non_nullable
               as bool,
-      sku: null == sku
+      sku: freezed == sku
           ? _value.sku
           : sku // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       requiresShipping: null == requiresShipping
           ? _value.requiresShipping
           : requiresShipping // ignore: cast_nullable_to_non_nullable
               as bool,
-      id: null == id
+      id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       image: freezed == image
           ? _value.image
           : image // ignore: cast_nullable_to_non_nullable
@@ -264,11 +264,11 @@ class __$$_ProductVariantCheckoutCopyWithImpl<$Res>
 class _$_ProductVariantCheckout extends _ProductVariantCheckout {
   _$_ProductVariantCheckout(
       {required this.priceV2,
-      required this.title,
+      this.title,
       required this.availableForSale,
-      required this.sku,
+      this.sku,
       required this.requiresShipping,
-      required this.id,
+      this.id,
       this.image,
       this.compareAtPrice,
       this.weight,
@@ -281,15 +281,15 @@ class _$_ProductVariantCheckout extends _ProductVariantCheckout {
   @override
   final PriceV2 priceV2;
   @override
-  final String title;
+  final String? title;
   @override
   final bool availableForSale;
   @override
-  final String sku;
+  final String? sku;
   @override
   final bool requiresShipping;
   @override
-  final String id;
+  final String? id;
   @override
   final ShopifyImage? image;
   @override
@@ -348,11 +348,11 @@ class _$_ProductVariantCheckout extends _ProductVariantCheckout {
 abstract class _ProductVariantCheckout extends ProductVariantCheckout {
   factory _ProductVariantCheckout(
       {required final PriceV2 priceV2,
-      required final String title,
+      final String? title,
       required final bool availableForSale,
-      required final String sku,
+      final String? sku,
       required final bool requiresShipping,
-      required final String id,
+      final String? id,
       final ShopifyImage? image,
       final PriceV2? compareAtPrice,
       final double? weight,
@@ -365,15 +365,15 @@ abstract class _ProductVariantCheckout extends ProductVariantCheckout {
   @override
   PriceV2 get priceV2;
   @override
-  String get title;
+  String? get title;
   @override
   bool get availableForSale;
   @override
-  String get sku;
+  String? get sku;
   @override
   bool get requiresShipping;
   @override
-  String get id;
+  String? get id;
   @override
   ShopifyImage? get image;
   @override

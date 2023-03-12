@@ -282,7 +282,7 @@ class _CartScreenState extends State<CartScreen> {
                 ElevatedButton(
                   onPressed: () {
                     Get.to(() => PreCheckoutScreen(
-                        cartModelItems: cartController.cartModelItemsSelected,userType: PreCheckoutUserType.user,));
+                        cartModelItems: cartController.cartModelItemsSelected));
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.deepPurple,

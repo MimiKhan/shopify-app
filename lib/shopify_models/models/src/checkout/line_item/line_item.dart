@@ -11,7 +11,7 @@ part 'line_item.g.dart';
 class LineItem with _$LineItem {
   const LineItem._();
   factory LineItem({
-    required String title,
+    String? title,
     required int quantity,
     required List<DiscountAllocations> discountAllocations,
     @Default([]) List<Attribute> customAttributes,
@@ -37,6 +37,5 @@ class LineItem with _$LineItem {
                 .toList());
   }
 
-  factory LineItem.fromJson(Map<String, dynamic> json) =>
-      _$LineItemFromJson(json);
+  factory LineItem.fromJson(Map<String, dynamic> json) => _$LineItemFromJson(json);
 }
